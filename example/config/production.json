@@ -1,0 +1,60 @@
+{
+  "db" : {
+    "type"                  : "mysql",
+    "port"                  : 3306,
+    "username"              : "aaaaaaaa",
+    "password"              : "aaaaaa",
+    "name"                  : "RTTTRRRR",
+    "host"                  : "127.0.0.1",
+    "sync"                  : false,
+    "logging"               : true,
+    "charset"               : "utf8",
+    "collate"               : "utf8_general_ci",
+    "syncOnAssociation"     : false,
+    "maxConcurrentQueries"  : 100,
+    "poolMinConnections"    : 0,
+    "poolMaxConnections"    : 1000,
+    "poolMaxIdleTime"       : 30,
+    "timezone"              : "+04:00"
+  },
+  "mailer" : {
+    "port"            : 25,
+    "host"            : "localhost",
+    "secure"          : false,
+    "auth"            : {},
+    "ignoreTls"       : true,
+    "name"            : "",
+    "localAdress"     : null,
+    "timeout"         : 200,
+    "greetingTimeout" : null,
+    "socketTimeout"   : null,
+    "debug"           : true,
+    "authMethod"      : "PLAIN",
+    "tls"             : {},
+    "adminAddress"    : "test@test.domain"
+  },
+  "logger" : {
+    "emitErrs" : true,
+    "exitOnError" : false,
+    "transports" : {
+      "transport" : {
+        "level"             : "debug",
+        "dirname"           : "toDefine",
+        "filename"          : "toDefine",
+        "handleExceptions"  : true,
+        "json"              : false,
+        "maxsize"           : 5242880,
+        "maxFiles"          : 5,
+        "colorize"          : true,
+        "datePattern"       : ".yyyy-MM-dd.log"
+      },
+      "console" : {
+        "level"             : "debug",
+        "handleExceptions"  : false,
+        "json"              : false,
+        "colorize"          : true
+      }
+    },
+    "logLevel" : "debug"
+  }
+}

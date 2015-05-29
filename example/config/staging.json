@@ -1,0 +1,36 @@
+{
+  "app" : {
+    "name" : "my AP STAGGING",
+    "stackError" : false
+  },
+  "express" : {
+    "jsonp"       : false,
+    "viewEngine" : "jade",
+    "session" : {
+      "enable" : false
+    },
+    "vhost" : {
+      "enable" : true,
+      "options" : {
+        "url"         : "myhosturl.url-stagging",
+        "aliases"     : [ "alias.myhosturl.url" ],      
+        "subdomains"  : true,
+        "http"        : {
+          "redirect" : {
+            "type" : 301,
+            "url"  : "www.myurl.url",
+            "port" : 80
+          }
+        }
+      }
+    }
+  },
+  "db" : {
+    "type"     : "mysql",
+    "port"     : 3306,
+    "username" : "bazarmaurice",
+    "password" : "93zPpZ6B5vmRpsCe",
+    "name"     : "bazarmaurice",
+    "host"     : "127.0.0.1"
+  }
+}

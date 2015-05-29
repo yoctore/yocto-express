@@ -1,0 +1,29 @@
+{
+  "app" : {
+    "name" : "my AP DEV &&&&&& é'é'éèç!",
+    "stackError" : false
+  },
+  "express" : {
+    "session" : {
+      "enable" : true,
+      "options" : {
+        "name" : "totot LGT 5"
+      }
+    },
+    "vhost" : {
+      "enable"      : true,
+      "options" : {
+        "url"         : "myhosturl.url",
+        "aliases"     : [ "alias.myhosturl.url" ],      
+        "subdomains"  : true,
+        "http"        : {
+          "redirect" : {
+            "type" : 301,
+            "url"  : "www.myurl.url",
+            "port" : 80
+          }
+        }
+      }
+    }
+  }
+}
