@@ -19,6 +19,9 @@ var path          = require('path');
 var consolidate   = require('consolidate');
 var favicon       = require('serve-favicon');
 var cookieParser  = require('cookie-parser');
+var util          = require('util');
+var bodyParser    = require('body-parser');
+var utils         = require('yocto-utils');
 
 // disable config log
 //config.logger.enableConsole(false);
@@ -254,7 +257,7 @@ Express.prototype.configure = function() {
       };
 
       /**
-       * process processCookieParser state
+       * process CookieParser state
        *
        * @method processCookieParser
        * @param {Object} context current context to use
@@ -270,6 +273,63 @@ Express.prototype.configure = function() {
         if (parser.enable) {          
           context.app.use(cookieParser(parser.secret, parser.options));
         }
+      };
+
+      /**
+       * process BodyParser configuration
+       *
+       * @method processBodyParser
+       * @param {Object} context current context to use
+       */
+      var processBodyParser = function(context, rules) {
+        // get current
+        var r = context.config.get('config').express[rules];
+        
+        // loggin message
+        context.logger.info([ '[ Express.configure.processBodyParser ] - Setting up [', rules, '] parser with these options :', utils.strings.inspect(r, false) ].join(' '));
+
+        // setting up body parser
+        context.app.use(bodyParser[rules](r));
+      };
+
+      /**
+       * process methodOverride configuration
+       *
+       * @method processMethodOverride
+       * @param {Object} context current context to use
+       */      
+      var processMethodOverride = function(context) {
+        // get all methods
+        var methods = context.config.get('config').express.methodOverride;
+        // parse available methods
+        _.each(methods, function(method) {
+          context.logger.info([ '[ Express.configure.processMethodOverride ] - Setting up methodOverride to use [', method, '] header rules' ].join(' '));
+        }, context);
+      };
+
+      var processSession = function(context) {
+        // get session data
+        var s = context.config.get('config').express.session;
+        
+        // session is enable ?
+        if (s.enable) {
+
+          // need uuid generator ?
+          if (s.options.genuuid) {
+            
+            // gen function
+            var gen = function(req) {
+              return uuid.v4();
+            };
+            
+            // extend options with new genid function
+            _.extend(s.options, { genid : gen });
+          }
+        }
+        
+        // process assign
+        context.logger.info([ '[ Express.configure.processSession ] - Setting up expression session middleware support for current express app' ] );
+        context.app.use(session(s));        
       };
 
       // process stack error      
@@ -298,7 +358,20 @@ Express.prototype.configure = function() {
       // process CookieParser
       processCookieParser(this);
       
-      // process body parser
+      // body parser rules
+      var brules = [ 'json', 'urlencoded' ];
+
+      // process middleware
+      _.each(brules, function(b) {
+        // process body parser
+        processBodyParser(this, b);        
+      }, this);
+
+      // process method override
+      processMethodOverride(this);
+      
+      // process session
+      processSession(this);
       
   } catch (e) {
     this.logger.error([ '[ Express.configure ] - An Error occured during express initialization. error is :', e, 'Operation aborted !' ] .join(' '));
@@ -368,7 +441,7 @@ Express.prototype.removeMiddleware = function(name) {
   var state = false;
   
   // parse router stack
-  var middlewareIndex =  _.findIndex(this.app._router.stack, 'name', name);
+  var middlewareIndex = _.findIndex(this.app._router.stack, 'name', name);
   
   // if correct index ?
   if (middlewareIndex >= 0) {

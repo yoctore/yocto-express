@@ -14,6 +14,12 @@
       "by"    : "Content-Type",
       "level" : 9
     },
+    "methodOverride" : [ 
+        "_method",
+        "X-HTTP-Method",
+        "X-HTTP-Method-Override",
+        "X-Method-Override"
+    ],
     "viewEngine" : "handlebars",
     "session" : {
       "enable" : true,
