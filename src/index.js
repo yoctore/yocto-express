@@ -22,6 +22,7 @@ var cookieParser  = require('cookie-parser');
 var util          = require('util');
 var bodyParser    = require('body-parser');
 var utils         = require('yocto-utils');
+var session       = require('express-session');
 
 // disable config log
 //config.logger.enableConsole(false);

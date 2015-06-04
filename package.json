@@ -37,6 +37,7 @@
     "consolidate": "^0.13.1",
     "dateformat": "^1.0.11",
     "express": "^4.12.4",
+    "express-session": "^1.11.2",
     "joi": "^6.4.1",
     "lodash": "^3.9.1",
     "method-override": "^2.3.3",
