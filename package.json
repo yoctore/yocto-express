@@ -41,6 +41,7 @@
     "express-session": "^1.11.2",
     "joi": "^6.4.1",
     "lodash": "^3.9.1",
+    "lusca": "^1.1.1",
     "method-override": "^2.3.3",
     "uuid": "^2.0.1",
     "yocto-config": "git+ssh://git@lab.yocto.digital:yocto-node-modules/yocto-config.git",

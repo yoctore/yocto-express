@@ -10,8 +10,6 @@ var uuid          = require('uuid');
 var _             = require('lodash');
 var logger        = require('yocto-logger');
 var express       = require('express');
-//var util          = require('util');
-//var joi           = require('joi');
 var config        = require('yocto-config');
 var compression   = require('compression');
 var fs            = require('fs');
@@ -19,11 +17,11 @@ var path          = require('path');
 var consolidate   = require('consolidate');
 var favicon       = require('serve-favicon');
 var cookieParser  = require('cookie-parser');
-var util          = require('util');
 var bodyParser    = require('body-parser');
 var utils         = require('yocto-utils');
 var session       = require('express-session');
 var multipart     = require('connect-multiparty');
+var lusca         = require('lusca');
 
 // disable config log
 //config.logger.enableConsole(false);
@@ -327,7 +325,7 @@ Express.prototype.configure = function() {
           if (s.options.genuuid) {
             
             // gen function
-            var gen = function(req) {
+            var gen = function() {
               return uuid.v4();
             };
             
@@ -341,7 +339,7 @@ Express.prototype.configure = function() {
         
         // log message
         context.logger.info('[ Express.configure.processSession ] - Setting up expression session middleware support for current express app');
-        context.logger.debug([ '[ Express.configure.processSession ] - config data used for session setting are : ', utils.strings.inspect(s.options, false) ].join(' '));
+        context.logger.debug([ '[ Express.configure.processSession ] - Config data used for session setting are : ', utils.strings.inspect(s.options, false) ].join(' '));
 
         // process assignement
         context.app.use(session(s.options));
@@ -363,6 +361,24 @@ Express.prototype.configure = function() {
           // setting up multipart
           context.app.use(multipart());                  
         }
+      };
+
+      var processSecurity = function(context) {
+        // get security data 
+        var security = context.config.get('config').express.security;
+
+        _.each(Object.keys(security), function(rule) {
+          // use rules ?        
+          if (!_.isEmpty(rule)) {
+  
+            // log message
+            context.logger.info([ '[ Express.configure.processSecurity ] - Setting up [', rule.toUpperCase(), '] rules for current express app' ].join(' '));
+            context.logger.debug([ '[ Express.configure.processSecurity ] - Config data used for', rule.toUpperCase(), 'setting are : ', utils.strings.inspect(security[rule], false) ].join(' '));
+  
+            // process
+            context.app.use(lusca[rule](security[rule]));
+          }          
+        }, context);
       };
 
       // process stack error      
@@ -410,7 +426,22 @@ Express.prototype.configure = function() {
       processSession(this);
       
       // process multipart
-      processMultipart(this);      
+      processMultipart(this);
+      
+      // middleware process
+      this.logger.banner('[ Express.configure ] - Initializing Express > Processing security rules ...');      
+      
+      // enable security
+      processSecurity(this);
+      
+      /**
+       * Setting up router
+       */
+      this.logger.info('[ Express.configure ] - Setting up Router for current express app');    
+      this.app.use(express.Router());
+
+      // All is ok !!! run the app      
+      this.logger.info('[ Express.configure ] - Express is ready to use ....');   
       
   } catch (e) {
     this.logger.error([ '[ Express.configure ] - An Error occured during express initialization. error is :', e, 'Operation aborted !' ] .join(' '));
