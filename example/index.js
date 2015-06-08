@@ -10,6 +10,6 @@ e.useDirectory('publiceeeeAA', '/toto');
 if (!e.configure()) {
   logger.error('Cannot process express. some errors occured. fix it before run');
 } else {
-  console.log(e.getSettings());
-  logger.info(util.inspect(e.app, { depth : null }));  
+  //console.log(e.getSettings());
+  //logger.info(util.inspect(e.app, { depth : null }));  
 }

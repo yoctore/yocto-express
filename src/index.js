@@ -23,6 +23,7 @@ var util          = require('util');
 var bodyParser    = require('body-parser');
 var utils         = require('yocto-utils');
 var session       = require('express-session');
+var multipart     = require('connect-multiparty');
 
 // disable config log
 //config.logger.enableConsole(false);
@@ -287,8 +288,9 @@ Express.prototype.configure = function() {
         var r = context.config.get('config').express[rules];
         
         // loggin message
-        context.logger.info([ '[ Express.configure.processBodyParser ] - Setting up [', rules, '] parser with these options :', utils.strings.inspect(r, false) ].join(' '));
-
+        context.logger.info([ '[ Express.configure.processBodyParser ] - Setting up [', rules, '] parser' ].join(' '));
+        context.logger.debug([ '[ Express.configure.processBodyParser ] - Used params for [', rules, '] config are :', utils.strings.inspect(r, false) ].join(' '));
+        
         // setting up body parser
         context.app.use(bodyParser[rules](r));
       };
@@ -308,6 +310,12 @@ Express.prototype.configure = function() {
         }, context);
       };
 
+      /**
+       * process processSession configuration
+       *
+       * @method processSession
+       * @param {Object} context current context to use
+       */   
       var processSession = function(context) {
         // get session data
         var s = context.config.get('config').express.session;
@@ -323,14 +331,38 @@ Express.prototype.configure = function() {
               return uuid.v4();
             };
             
+            // remove state flag non needed on session middleware options
+            delete s.options.genuuid;
+
             // extend options with new genid function
             _.extend(s.options, { genid : gen });
           }
         }
         
-        // process assign
-        context.logger.info([ '[ Express.configure.processSession ] - Setting up expression session middleware support for current express app' ] );
-        context.app.use(session(s));        
+        // log message
+        context.logger.info('[ Express.configure.processSession ] - Setting up expression session middleware support for current express app');
+        context.logger.debug([ '[ Express.configure.processSession ] - config data used for session setting are : ', utils.strings.inspect(s.options, false) ].join(' '));
+
+        // process assignement
+        context.app.use(session(s.options));
+      };
+
+      /**
+       * process processMultipart configuration
+       *
+       * @method processMultipart
+       * @param {Object} context current context to use
+       */
+      var processMultipart = function(context) {
+        // get multipart state
+        var m = context.config.get('config').express.multipart;
+
+        // enable multiplart ?
+        if (m) {
+          context.logger.info('[ Express.configure.processMultipart ] - Setting up multipart support for current express app');
+          // setting up multipart
+          context.app.use(multipart());                  
+        }
       };
 
       // process stack error      
@@ -347,6 +379,9 @@ Express.prototype.configure = function() {
       
       // process favicon
       processFavicon(this);
+
+      // middleware process
+      this.logger.banner('[ Express.configure ] - Initializing Express > Processing middleware ...');
       
       // process compression
       processCompression(this);
@@ -373,6 +408,9 @@ Express.prototype.configure = function() {
       
       // process session
       processSession(this);
+      
+      // process multipart
+      processMultipart(this);      
       
   } catch (e) {
     this.logger.error([ '[ Express.configure ] - An Error occured during express initialization. error is :', e, 'Operation aborted !' ] .join(' '));

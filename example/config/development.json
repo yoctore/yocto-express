@@ -7,7 +7,8 @@
     "session" : {
       "enable" : true,
       "options" : {
-        "name" : "totot LGT 5"
+        "name" : "totot LGT 5",
+        "resave" : false
       }
     },
     "vhost" : {
