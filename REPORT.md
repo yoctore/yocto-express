@@ -10,11 +10,11 @@
 
 ## src/index.js
 
--  [ ] **TODO** `(line 255)`  => Implement Vhost
--  [ ] **NOTE** `(line 256)`  => TEST NOTE
--  [ ] **FIXME** `(line 257)`  => OMG TEST AND FIX IT
+-  [ ] **TODO** `(line 417)`  => Implement Vhost If needed, we need to check if is required or not (.htaccess process check needed)
+-  [ ] **TODO** `(line 455)`  => Implement i18n process with i18next-node for jade or makara for dust 
+-  [ ] **TODO** `(line 456)`  => Implement https://github.com/auth0/node-jsonwebtoken for secure transaction between apps
 
 
 * * *
 
-Last generated: Thu May 28 2015 14:29:26 by [grunt-todo](https://github.com/leny/grunt-todo).
+Last generated: Mon Jun 08 2015 16:51:22 by [grunt-todo](https://github.com/leny/grunt-todo).

@@ -337,10 +337,22 @@ Express.prototype.configure = function() {
           }
         }
         
+        // trust proxy ?
+        if (s.options.proxy) {
+          context.logger.info('[ Express.configure.processSession ] - Enable proxy trust for current express app');
+          context.app.set('trust proxy', 1); // trust proxy
+        }
+        
         // log message
         context.logger.info('[ Express.configure.processSession ] - Setting up expression session middleware support for current express app');
         context.logger.debug([ '[ Express.configure.processSession ] - Config data used for session setting are : ', utils.strings.inspect(s.options, false) ].join(' '));
 
+        // is production or staging mode ?
+        if (context.app.get('env') != 'development') {
+          // force secure cookie
+          s.options.cookie.secure = true;
+        }
+        
         // process assignement
         context.app.use(session(s.options));
       };
@@ -439,6 +451,9 @@ Express.prototype.configure = function() {
        */
       this.logger.info('[ Express.configure ] - Setting up Router for current express app');    
       this.app.use(express.Router());
+
+      // TODO => Implement i18n process with i18next-node for jade or makara for dust 
+      // TODO => Implement https://github.com/auth0/node-jsonwebtoken for secure transaction between apps
 
       // All is ok !!! run the app      
       this.logger.info('[ Express.configure ] - Express is ready to use ....');   

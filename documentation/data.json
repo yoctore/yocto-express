@@ -28,7 +28,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 26,
+            "line": 30,
             "description": "Default app name const",
             "itemtype": "property",
             "name": "DEFAULT_APP_NAME",
@@ -37,7 +37,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 34,
+            "line": 38,
             "description": "Default app instance",
             "itemtype": "property",
             "name": "app",
@@ -46,7 +46,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 42,
+            "line": 46,
             "description": "Default logger instance",
             "itemtype": "property",
             "name": "logger",
@@ -55,7 +55,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 50,
+            "line": 54,
             "description": "Default config instance",
             "itemtype": "property",
             "name": "config",
@@ -64,7 +64,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 59,
+            "line": 63,
             "description": "Get settings of express app",
             "itemtype": "method",
             "name": "getSettings",
@@ -76,7 +76,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 70,
+            "line": 74,
             "description": "Default configure option",
             "itemtype": "method",
             "name": "configure",
@@ -88,7 +88,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 98,
+            "line": 102,
             "description": "Enable stack error",
             "itemtype": "method",
             "name": "enableStackError",
@@ -103,7 +103,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 115,
+            "line": 119,
             "description": "Enable pretty HTML output",
             "itemtype": "method",
             "name": "enablePrettyHTML",
@@ -118,7 +118,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 131,
+            "line": 135,
             "description": "Process view engine setting",
             "itemtype": "method",
             "name": "processViewEngine",
@@ -133,7 +133,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 149,
+            "line": 153,
             "description": "Process directory path to use on app",
             "itemtype": "method",
             "name": "processDirectory",
@@ -148,7 +148,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 166,
+            "line": 170,
             "description": "Setting up favicon",
             "itemtype": "method",
             "name": "processFavicon",
@@ -163,7 +163,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 196,
+            "line": 200,
             "description": "process default compression",
             "itemtype": "method",
             "name": "processCompression",
@@ -178,7 +178,103 @@
         },
         {
             "file": "src/index.js",
-            "line": 266,
+            "line": 241,
+            "description": "process jsoncallback state",
+            "itemtype": "method",
+            "name": "processJsonCallack",
+            "params": [
+                {
+                    "name": "context",
+                    "description": "current context to use",
+                    "type": "Object"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "src/index.js",
+            "line": 259,
+            "description": "process CookieParser state",
+            "itemtype": "method",
+            "name": "processCookieParser",
+            "params": [
+                {
+                    "name": "context",
+                    "description": "current context to use",
+                    "type": "Object"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "src/index.js",
+            "line": 278,
+            "description": "process BodyParser configuration",
+            "itemtype": "method",
+            "name": "processBodyParser",
+            "params": [
+                {
+                    "name": "context",
+                    "description": "current context to use",
+                    "type": "Object"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "src/index.js",
+            "line": 296,
+            "description": "process methodOverride configuration",
+            "itemtype": "method",
+            "name": "processMethodOverride",
+            "params": [
+                {
+                    "name": "context",
+                    "description": "current context to use",
+                    "type": "Object"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "src/index.js",
+            "line": 311,
+            "description": "process processSession configuration",
+            "itemtype": "method",
+            "name": "processSession",
+            "params": [
+                {
+                    "name": "context",
+                    "description": "current context to use",
+                    "type": "Object"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "src/index.js",
+            "line": 360,
+            "description": "process processMultipart configuration",
+            "itemtype": "method",
+            "name": "processMultipart",
+            "params": [
+                {
+                    "name": "context",
+                    "description": "current context to use",
+                    "type": "Object"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "src/index.js",
+            "line": 449,
+            "description": "Setting up router",
+            "class": ""
+        },
+        {
+            "file": "src/index.js",
+            "line": 470,
             "description": "Set directory to use on express app",
             "itemtype": "method",
             "name": "useDirectory",
@@ -201,7 +297,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 313,
+            "line": 517,
             "description": "Removing middleware form key name",
             "itemtype": "method",
             "name": "removeMiddleware",
@@ -220,7 +316,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 343,
+            "line": 547,
             "description": "get set function, assign given data to a property",
             "itemtype": "method",
             "name": "set",
@@ -247,6 +343,10 @@
         {
             "message": "Missing item type",
             "line": " src/index.js:3"
+        },
+        {
+            "message": "Missing item type\nSetting up router",
+            "line": " src/index.js:449"
         }
     ]
 }

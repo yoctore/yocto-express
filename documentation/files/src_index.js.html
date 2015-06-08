@@ -90,14 +90,18 @@ var uuid          = require(&#x27;uuid&#x27;);
 var _             = require(&#x27;lodash&#x27;);
 var logger        = require(&#x27;yocto-logger&#x27;);
 var express       = require(&#x27;express&#x27;);
-//var util          = require(&#x27;util&#x27;);
-//var joi           = require(&#x27;joi&#x27;);
 var config        = require(&#x27;yocto-config&#x27;);
 var compression   = require(&#x27;compression&#x27;);
 var fs            = require(&#x27;fs&#x27;);
 var path          = require(&#x27;path&#x27;);
 var consolidate   = require(&#x27;consolidate&#x27;);
 var favicon       = require(&#x27;serve-favicon&#x27;);
+var cookieParser  = require(&#x27;cookie-parser&#x27;);
+var bodyParser    = require(&#x27;body-parser&#x27;);
+var utils         = require(&#x27;yocto-utils&#x27;);
+var session       = require(&#x27;express-session&#x27;);
+var multipart     = require(&#x27;connect-multiparty&#x27;);
+var lusca         = require(&#x27;lusca&#x27;);
 
 // disable config log
 //config.logger.enableConsole(false);
@@ -265,11 +269,11 @@ Express.prototype.configure = function() {
         // file exists ?
         if (fs.existsSync(fav)) {
           // set and log
-          context.logger.info([ &#x27;[ Express.useFavicon ] - Adding favicon : &#x27;, fav ].join(&#x27; &#x27;)); 
+          context.logger.info([ &#x27;[ Express.configure.useFavicon ] - Adding favicon : &#x27;, fav ].join(&#x27; &#x27;)); 
           context.app.use(favicon(fav,  { maxAge : 2592000000 } ));
         } else {
           // error
-          logger.warning([ &quot;[ Express.useFavicon ] - Favicon doesn&#x27;t exist. Checking path [&quot;, fav, &#x27;] failed&#x27; ].join(&#x27; &#x27;));
+          logger.warning([ &quot;[ Express.configure.useFavicon ] - Favicon doesn&#x27;t exist. Checking path [&quot;, fav, &#x27;] failed&#x27; ].join(&#x27; &#x27;));
         }
       };
 
@@ -294,7 +298,7 @@ Express.prototype.configure = function() {
             if ((_.isString(eFilter.rules)) &amp;&amp; (_.isString(eFilter.by)) &amp;&amp; (_.isNumber(eFilter.level))) {
               
               // processsing
-              context.logger.info([ &#x27;[ Express.enableCompression ] - Setting up compression rules with filter [&#x27;, eFilter.rules, &#x27;] for [&#x27;, eFilter.by, &#x27;] at level [&#x27;, _.parseInt(eFilter.level), &#x27;]&#x27;].join(&#x27; &#x27;));
+              context.logger.info([ &#x27;[ Express.configure.enableCompression ] - Setting up compression rules with filter [&#x27;, eFilter.rules, &#x27;] for [&#x27;, eFilter.by, &#x27;] at level [&#x27;, _.parseInt(eFilter.level), &#x27;]&#x27;].join(&#x27; &#x27;));
               context.app.use(compression({
                 filter : function(request, response) {
                   
@@ -314,6 +318,161 @@ Express.prototype.configure = function() {
         } 
       };
 
+      /**
+       * process jsoncallback state
+       *
+       * @method processJsonCallack
+       * @param {Object} context current context to use
+       */
+      var processJsonCallack = function(context) {
+        
+        // get config
+        var state = context.config.get(&#x27;config&#x27;).express.jsonp;
+
+        // log specific message
+        context.logger[ (state ? &#x27;info&#x27; : &#x27;warning&#x27; )]([ &#x27;[ Express.configure.processJsonCallack ] -&#x27;, (state ? &#x27;Enable&#x27; : &#x27;Disable&#x27;), &#x27;JSONP for express&#x27; ] .join(&#x27; &#x27;));
+        
+        // process
+        context.app.enable(&#x27;jsonp callback&#x27;, state);
+      };
+
+      /**
+       * process CookieParser state
+       *
+       * @method processCookieParser
+       * @param {Object} context current context to use
+       */
+      var processCookieParser = function(context) {
+        // get config
+        var parser = context.config.get(&#x27;config&#x27;).express.cookieParser;
+
+        // log specific message
+        context.logger[ (parser.enable ? &#x27;info&#x27; : &#x27;warning&#x27; )]([ &#x27;[ Express.configure.processCookieParser ] -&#x27;, (parser.enable ? &#x27;Enable&#x27; : &#x27;Disable&#x27;), &#x27;cookieParser&#x27; ] .join(&#x27; &#x27;));
+        
+        // process
+        if (parser.enable) {          
+          context.app.use(cookieParser(parser.secret, parser.options));
+        }
+      };
+
+      /**
+       * process BodyParser configuration
+       *
+       * @method processBodyParser
+       * @param {Object} context current context to use
+       */
+      var processBodyParser = function(context, rules) {
+        // get current
+        var r = context.config.get(&#x27;config&#x27;).express[rules];
+        
+        // loggin message
+        context.logger.info([ &#x27;[ Express.configure.processBodyParser ] - Setting up [&#x27;, rules, &#x27;] parser&#x27; ].join(&#x27; &#x27;));
+        context.logger.debug([ &#x27;[ Express.configure.processBodyParser ] - Used params for [&#x27;, rules, &#x27;] config are :&#x27;, utils.strings.inspect(r, false) ].join(&#x27; &#x27;));
+        
+        // setting up body parser
+        context.app.use(bodyParser[rules](r));
+      };
+
+      /**
+       * process methodOverride configuration
+       *
+       * @method processMethodOverride
+       * @param {Object} context current context to use
+       */      
+      var processMethodOverride = function(context) {
+        // get all methods
+        var methods = context.config.get(&#x27;config&#x27;).express.methodOverride;
+        // parse available methods
+        _.each(methods, function(method) {
+          context.logger.info([ &#x27;[ Express.configure.processMethodOverride ] - Setting up methodOverride to use [&#x27;, method, &#x27;] header rules&#x27; ].join(&#x27; &#x27;));
+        }, context);
+      };
+
+      /**
+       * process processSession configuration
+       *
+       * @method processSession
+       * @param {Object} context current context to use
+       */   
+      var processSession = function(context) {
+        // get session data
+        var s = context.config.get(&#x27;config&#x27;).express.session;
+        
+        // session is enable ?
+        if (s.enable) {
+
+          // need uuid generator ?
+          if (s.options.genuuid) {
+            
+            // gen function
+            var gen = function() {
+              return uuid.v4();
+            };
+            
+            // remove state flag non needed on session middleware options
+            delete s.options.genuuid;
+
+            // extend options with new genid function
+            _.extend(s.options, { genid : gen });
+          }
+        }
+        
+        // trust proxy ?
+        if (s.options.proxy) {
+          context.logger.info(&#x27;[ Express.configure.processSession ] - Enable proxy trust for current express app&#x27;);
+          context.app.set(&#x27;trust proxy&#x27;, 1); // trust proxy
+        }
+        
+        // log message
+        context.logger.info(&#x27;[ Express.configure.processSession ] - Setting up expression session middleware support for current express app&#x27;);
+        context.logger.debug([ &#x27;[ Express.configure.processSession ] - Config data used for session setting are : &#x27;, utils.strings.inspect(s.options, false) ].join(&#x27; &#x27;));
+
+        // is production or staging mode ?
+        if (context.app.get(&#x27;env&#x27;) != &#x27;development&#x27;) {
+          // force secure cookie
+          s.options.cookie.secure = true;
+        }
+        
+        // process assignement
+        context.app.use(session(s.options));
+      };
+
+      /**
+       * process processMultipart configuration
+       *
+       * @method processMultipart
+       * @param {Object} context current context to use
+       */
+      var processMultipart = function(context) {
+        // get multipart state
+        var m = context.config.get(&#x27;config&#x27;).express.multipart;
+
+        // enable multiplart ?
+        if (m) {
+          context.logger.info(&#x27;[ Express.configure.processMultipart ] - Setting up multipart support for current express app&#x27;);
+          // setting up multipart
+          context.app.use(multipart());                  
+        }
+      };
+
+      var processSecurity = function(context) {
+        // get security data 
+        var security = context.config.get(&#x27;config&#x27;).express.security;
+
+        _.each(Object.keys(security), function(rule) {
+          // use rules ?        
+          if (!_.isEmpty(rule)) {
+  
+            // log message
+            context.logger.info([ &#x27;[ Express.configure.processSecurity ] - Setting up [&#x27;, rule.toUpperCase(), &#x27;] rules for current express app&#x27; ].join(&#x27; &#x27;));
+            context.logger.debug([ &#x27;[ Express.configure.processSecurity ] - Config data used for&#x27;, rule.toUpperCase(), &#x27;setting are : &#x27;, utils.strings.inspect(security[rule], false) ].join(&#x27; &#x27;));
+  
+            // process
+            context.app.use(lusca[rule](security[rule]));
+          }          
+        }, context);
+      };
+
       // process stack error      
       processStackError(this);
       
@@ -328,11 +487,56 @@ Express.prototype.configure = function() {
       
       // process favicon
       processFavicon(this);
+
+      // middleware process
+      this.logger.banner(&#x27;[ Express.configure ] - Initializing Express &gt; Processing middleware ...&#x27;);
       
       // process compression
       processCompression(this);
       
-      // TODO =&gt; Implement Vhost
+      // TODO =&gt; Implement Vhost If needed, we need to check if is required or not (.htaccess process check needed)
+      
+      // process Jsonp Callback
+      processJsonCallack(this);
+      
+      // process CookieParser
+      processCookieParser(this);
+      
+      // body parser rules
+      var brules = [ &#x27;json&#x27;, &#x27;urlencoded&#x27; ];
+
+      // process middleware
+      _.each(brules, function(b) {
+        // process body parser
+        processBodyParser(this, b);        
+      }, this);
+
+      // process method override
+      processMethodOverride(this);
+      
+      // process session
+      processSession(this);
+      
+      // process multipart
+      processMultipart(this);
+      
+      // middleware process
+      this.logger.banner(&#x27;[ Express.configure ] - Initializing Express &gt; Processing security rules ...&#x27;);      
+      
+      // enable security
+      processSecurity(this);
+      
+      /**
+       * Setting up router
+       */
+      this.logger.info(&#x27;[ Express.configure ] - Setting up Router for current express app&#x27;);    
+      this.app.use(express.Router());
+
+      // TODO =&gt; Implement i18n process with i18next-node for jade or makara for dust 
+      // TODO =&gt; Implement https://github.com/auth0/node-jsonwebtoken for secure transaction between apps
+
+      // All is ok !!! run the app      
+      this.logger.info(&#x27;[ Express.configure ] - Express is ready to use ....&#x27;);   
       
   } catch (e) {
     this.logger.error([ &#x27;[ Express.configure ] - An Error occured during express initialization. error is :&#x27;, e, &#x27;Operation aborted !&#x27; ] .join(&#x27; &#x27;));
@@ -402,7 +606,7 @@ Express.prototype.removeMiddleware = function(name) {
   var state = false;
   
   // parse router stack
-  var middlewareIndex =  _.findIndex(this.app._router.stack, &#x27;name&#x27;, name);
+  var middlewareIndex = _.findIndex(this.app._router.stack, &#x27;name&#x27;, name);
   
   // if correct index ?
   if (middlewareIndex &gt;= 0) {
