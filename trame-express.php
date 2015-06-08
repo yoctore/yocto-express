@@ -295,6 +295,9 @@ module.exports = function(app) {
       }
     }
 
+
+
+
     /**
      * Setting up Social rules
      */
@@ -332,11 +335,14 @@ module.exports = function(app) {
       }
     });
 
+
+
     /**
      * Setting up SEO rules
      */
     logger.debug('Setting up seo rules for html5 js app');     
     app.use(prerender);
+
 
     /**
      * Setting up multipart for upload
