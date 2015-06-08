@@ -171,13 +171,17 @@ Express.prototype.configure = function() {
       this.app.set(&#x27;port&#x27;, this.config.get(&#x27;config&#x27;).port);
       this.logger.info([ &#x27;[ Express.configure ] - Setting port to [&#x27;, this.app.get(&#x27;port&#x27;), &#x27;]&#x27; ].join(&#x27; &#x27;));
       
-      // set defaut name 
+      // set the default name 
       this.app.set(&#x27;app_name&#x27;, _.words(this.config.get(&#x27;config&#x27;).app.name.toLowerCase()).join(&#x27;-&#x27;));
       this.logger.info([ &#x27;[ Express.configure ] - Setting app name to [&#x27;, this.app.get(&#x27;app_name&#x27;), &#x27;]&#x27; ].join(&#x27; &#x27;));
       
-      // setting port
+      // setting up env
       this.app.set(&#x27;env&#x27;, this.config.get(&#x27;config&#x27;).env);
       this.logger.info([ &#x27;[ Express.configure ] - Setting env to [&#x27;, this.app.get(&#x27;env&#x27;), &#x27;]&#x27; ].join(&#x27; &#x27;));
+      
+      // setting up host
+      this.app.set(&#x27;host&#x27;, this.config.get(&#x27;config&#x27;).host);
+      this.logger.info([ &#x27;[ Express.configure ] - Setting host to [&#x27;, this.app.get(&#x27;host&#x27;), &#x27;]&#x27; ].join(&#x27; &#x27;));      
       
       /**
        * Enable stack error
@@ -219,6 +223,9 @@ Express.prototype.configure = function() {
        * @param {Object} context current context to use
        */
       var processViewEngine = function(context) {
+        // default view engine
+        
+        // TODO =&gt; Implement other template engine if possible Like dust or handlebars
         var name = context.config.get(&#x27;config&#x27;).express.viewEngine || &#x27;jade&#x27;;
 
         // adding consolidatejs        

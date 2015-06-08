@@ -91,13 +91,17 @@ Express.prototype.configure = function() {
       this.app.set('port', this.config.get('config').port);
       this.logger.info([ '[ Express.configure ] - Setting port to [', this.app.get('port'), ']' ].join(' '));
       
-      // set defaut name 
+      // set the default name 
       this.app.set('app_name', _.words(this.config.get('config').app.name.toLowerCase()).join('-'));
       this.logger.info([ '[ Express.configure ] - Setting app name to [', this.app.get('app_name'), ']' ].join(' '));
       
-      // setting port
+      // setting up env
       this.app.set('env', this.config.get('config').env);
       this.logger.info([ '[ Express.configure ] - Setting env to [', this.app.get('env'), ']' ].join(' '));
+      
+      // setting up host
+      this.app.set('host', this.config.get('config').host);
+      this.logger.info([ '[ Express.configure ] - Setting host to [', this.app.get('host'), ']' ].join(' '));      
       
       /**
        * Enable stack error
@@ -139,6 +143,9 @@ Express.prototype.configure = function() {
        * @param {Object} context current context to use
        */
       var processViewEngine = function(context) {
+        // default view engine
+        
+        // TODO => Implement other template engine if possible Like dust or handlebars
         var name = context.config.get('config').express.viewEngine || 'jade';
 
         // adding consolidatejs        

@@ -88,7 +88,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 102,
+            "line": 106,
             "description": "Enable stack error",
             "itemtype": "method",
             "name": "enableStackError",
@@ -103,7 +103,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 119,
+            "line": 123,
             "description": "Enable pretty HTML output",
             "itemtype": "method",
             "name": "enablePrettyHTML",
@@ -118,7 +118,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 135,
+            "line": 139,
             "description": "Process view engine setting",
             "itemtype": "method",
             "name": "processViewEngine",
@@ -133,7 +133,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 153,
+            "line": 160,
             "description": "Process directory path to use on app",
             "itemtype": "method",
             "name": "processDirectory",
@@ -148,7 +148,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 170,
+            "line": 177,
             "description": "Setting up favicon",
             "itemtype": "method",
             "name": "processFavicon",
@@ -163,7 +163,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 200,
+            "line": 207,
             "description": "process default compression",
             "itemtype": "method",
             "name": "processCompression",
@@ -178,7 +178,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 241,
+            "line": 248,
             "description": "process jsoncallback state",
             "itemtype": "method",
             "name": "processJsonCallack",
@@ -193,7 +193,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 259,
+            "line": 266,
             "description": "process CookieParser state",
             "itemtype": "method",
             "name": "processCookieParser",
@@ -208,7 +208,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 278,
+            "line": 285,
             "description": "process BodyParser configuration",
             "itemtype": "method",
             "name": "processBodyParser",
@@ -223,7 +223,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 296,
+            "line": 303,
             "description": "process methodOverride configuration",
             "itemtype": "method",
             "name": "processMethodOverride",
@@ -238,7 +238,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 311,
+            "line": 318,
             "description": "process processSession configuration",
             "itemtype": "method",
             "name": "processSession",
@@ -253,7 +253,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 360,
+            "line": 367,
             "description": "process processMultipart configuration",
             "itemtype": "method",
             "name": "processMultipart",
@@ -268,13 +268,13 @@
         },
         {
             "file": "src/index.js",
-            "line": 449,
+            "line": 456,
             "description": "Setting up router",
             "class": ""
         },
         {
             "file": "src/index.js",
-            "line": 470,
+            "line": 477,
             "description": "Set directory to use on express app",
             "itemtype": "method",
             "name": "useDirectory",
@@ -297,7 +297,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 517,
+            "line": 524,
             "description": "Removing middleware form key name",
             "itemtype": "method",
             "name": "removeMiddleware",
@@ -316,7 +316,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 547,
+            "line": 554,
             "description": "get set function, assign given data to a property",
             "itemtype": "method",
             "name": "set",
@@ -346,7 +346,7 @@
         },
         {
             "message": "Missing item type\nSetting up router",
-            "line": " src/index.js:449"
+            "line": " src/index.js:456"
         }
     ]
 }
