@@ -23,8 +23,6 @@ var session       = require('express-session');
 var multipart     = require('connect-multiparty');
 var lusca         = require('lusca');
 
-// disable config log
-//config.logger.enableConsole(false);
 
 function Express(app) {
   /**
