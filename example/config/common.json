@@ -30,7 +30,12 @@
         "genuuid" : true,
         "proxy" : true,
         "resave" : true,
-        "saveUninitialized" : true
+        "saveUninitialized" : true,
+        "store" : {
+          "instance" : "mongo",
+          "uri"  : "mongodb://user:pass@host:port/dbname",
+          "type" : "uri"
+        }
       }
     },
     "vhost" : {

@@ -1,15 +1,13 @@
-var e         = require('../src');
+var e         = require('../src')();
 var util      = require('util');
-var logger    =  require('yocto-logger');
-
+var logger    = require('yocto-logger');
 
 e.config.set('base', './example/config');
 
 e.useDirectory('publiceeeeAA');
 e.useDirectory('publiceeeeAA', '/toto');
-if (!e.configure()) {
-  logger.error('Cannot process express. some errors occured. fix it before run');
-} else {
-  //console.log(e.getSettings());
-  //logger.info(util.inspect(e.app, { depth : null }));  
-}
+e.configure().then(function (success) {
+  console.log(success);
+}).catch(function (error) {
+  console.log(error);
+});
