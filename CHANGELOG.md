@@ -1,3 +1,10 @@
+## 1.0.0
+
+- Add jwt token process
+- Minor fixes
+- process Hint problem
+- prepare to publish
+
 
 ## 0.2.0 & 0.3.0 (2015-14-10)
 

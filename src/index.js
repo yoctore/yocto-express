@@ -1,10 +1,5 @@
 'use strict';
 
-/**
- *
- * @see : https://www.npmjs.org/package/uuid 
- * @see : https://www.npmjs.org/package/dateformat
- */
 var df            = require('dateformat');
 var uuid          = require('uuid');
 var _             = require('lodash');
@@ -24,11 +19,17 @@ var lusca         = require('lusca');
 var Q             = require('q');
 var MongoStore    = require('connect-mongo')(session);
 var prerender     = require('prerender-node');
+var jwt           = require('yocto-jwt');
 
-function Express(config, logger) {
+/**
+ * manage Express setup
+ *
+ * @class Express
+ */
+function Express (config, logger) {
   /**
    * Default app name const
-   * 
+   *
    * @property DEFAULT_APP_NAME
    * @type String
    */
@@ -36,7 +37,7 @@ function Express(config, logger) {
 
   /**
    * Default app instance
-   * 
+   *
    * @property app
    * @type Object
    */
@@ -44,7 +45,7 @@ function Express(config, logger) {
 
   /**
    * Default logger instance
-   * 
+   *
    * @property logger
    * @type Object
    */
@@ -52,7 +53,7 @@ function Express(config, logger) {
 
   /**
    * Default config instance
-   * 
+   *
    * @property config
    * @type Object
    */
@@ -60,7 +61,7 @@ function Express(config, logger) {
 
   /**
    * Default property state
-   * 
+   *
    * @property state
    * @type Boolean
    * @default false
@@ -70,13 +71,22 @@ function Express(config, logger) {
 
 /**
  * Get settings of express app
- * 
- * @method getSettings
+ *
  * @return {Object} settings object or empty object
  */
-Express.prototype.getSettings = function() {
+Express.prototype.getSettings = function () {
   // return object data
   return this.app.settings || {};
+};
+
+/**
+ * Utiltity method to retrieve current app
+ *
+ * @return {Object} current express object
+ */
+Express.prototype.getApp = function () {
+  // return current app instance
+  return this.app;
 };
 
 /**
@@ -100,7 +110,7 @@ Express.prototype.processBase = function () {
                      this.app.get('port'), ']'
                    ].join(' '));
 
-  // set the default name 
+  // set the default name
   this.app.set('app_name', _.words(this.config.get('config').app.name.toLowerCase()).join('-'));
   // log message
   this.logger.info([ '[ Express.processBase ] - Setting app name to [',
@@ -142,7 +152,7 @@ Express.prototype.processStackError = function () {
 
   //  getting data
   var state = this.config.get('config').app.stackError || true;
-  
+
   // setting up stack error
   this.app.set('showStackError', state);
 
@@ -159,11 +169,11 @@ Express.prototype.processStackError = function () {
  *
  * @return {Boolean} true if all is ok false otherwise
  */
-Express.prototype.processPrettyHTML = function () { 
+Express.prototype.processPrettyHTML = function () {
   // config is ready ?
   if (!this.isReady()) {
     // error message
-    this.logger.error([ '[ Express.processPrettyHTML ] -', 
+    this.logger.error([ '[ Express.processPrettyHTML ] -',
                         'Cannot process config. App is not ready.' ].join(' '));
     // invalid statement
     return false;
@@ -183,7 +193,7 @@ Express.prototype.processPrettyHTML = function () {
 };
 
 /**
- * Process view engine setting 
+ * Process view engine setting
  *
  * @return {Boolean} true if all is ok false otherwise
  */
@@ -212,7 +222,6 @@ Express.prototype.processViewEngine = function () {
   return true;
 };
 
-
 /**
  * Process directory path to use on app
  *
@@ -232,7 +241,7 @@ Express.prototype.processDirectory = function () {
   var directories = this.config.get('config').directory;
 
   // reading config file
-  _.each(directories, function(d) {
+  _.each(directories, function (d) {
     // process
     this.useDirectory(_.first(Object.keys(d)));
   }, this);
@@ -240,7 +249,6 @@ Express.prototype.processDirectory = function () {
   // default statement
   return true;
 };
-
 
 /**
  * Setting up favicon
@@ -263,7 +271,7 @@ Express.prototype.processFavicon = function () {
   // is relative path ?
   if (!path.isAbsolute(p)) {
     // normalize path
-    p = path.normalize([ process.cwd(), p ].join('/'));  
+    p = path.normalize([ process.cwd(), p ].join('/'));
   }
 
   // build path
@@ -272,9 +280,9 @@ Express.prototype.processFavicon = function () {
   // file exists ?
   if (fs.existsSync(fav)) {
     // set and log
-    this.logger.info([ '[ Express.useFavicon ] - Adding favicon : ', fav ].join(' ')); 
+    this.logger.info([ '[ Express.useFavicon ] - Adding favicon : ', fav ].join(' '));
     // use
-    this.app.use(favicon(fav,  { maxAge : 2592000000 } ));
+    this.app.use(favicon(fav,  { maxAge : 2592000000 }));
   } else {
     // error
     this.logger.warning([ '[ Express.useFavicon ] - Favicon doesn\'t exist.',
@@ -284,7 +292,6 @@ Express.prototype.processFavicon = function () {
   // default statement
   return true;
 };
-
 
 /**
  * Process default compression
@@ -321,10 +328,10 @@ Express.prototype.processCompression = function () {
                        ].join(' '));
       // set up
       this.app.use(compression({
-        filter : function(request, response) {
+        filter  : function (request, response) {
           // has header with no compression rules ?
           if (_.has(request, 'headers') && request.headers['x-no-compression']) {
-            return false; 
+            return false;
           }
 
           // main compression process
@@ -332,7 +339,7 @@ Express.prototype.processCompression = function () {
           // return tests
           return rules.test(response.getHeader(eFilter.by));
         },
-        level : _.parseInt(eFilter.level)
+        level   : _.parseInt(eFilter.level)
       }));
     }
   }
@@ -360,10 +367,10 @@ Express.prototype.processJsonCallack = function () {
   var state = this.config.get('config').express.jsonp;
 
   // log specific message
-  this.logger[ (state ? 'info' : 'warning' )]([ '[ Express.processJsonCallack ] -',
+  this.logger[ (state ? 'info' : 'warning') ]([ '[ Express.processJsonCallack ] -',
                                                 (state ? 'Enable' : 'Disable'),
                                                 'JSONP for express' ] .join(' '));
-  
+
   // process
   this.app.enable('jsonp callback', state);
 
@@ -390,7 +397,7 @@ Express.prototype.processCookieParser = function () {
   var parser = this.config.get('config').express.cookieParser;
 
   // log specific message
-  this.logger[ (parser.enable ? 'info' : 'warning' )]([ '[ Express.processCookieParser ] -',
+  this.logger[ (parser.enable ? 'info' : 'warning') ]([ '[ Express.processCookieParser ] -',
                                                         (parser.enable ? 'Enable' : 'Disable'),
                                                         'cookieParser' ] .join(' '));
 
@@ -408,7 +415,7 @@ Express.prototype.processCookieParser = function () {
  *
  * @return {Boolean} true if all is ok false otherwise
  */
-Express.prototype.processBodyParser = function() {
+Express.prototype.processBodyParser = function () {
   // config is ready ?
   if (!this.isReady()) {
     // error message
@@ -424,7 +431,7 @@ Express.prototype.processBodyParser = function() {
   _.each(rules, function (rule) {
     // get current
     var r = this.config.get('config').express[rule];
-    
+
     // loggin message
     this.logger.info([ '[ Express.configure.processBodyParser ] - Setting up [', rule,
                        '] parser' ].join(' '));
@@ -458,7 +465,7 @@ Express.prototype.processMethodOverride = function () {
   var methods = this.config.get('config').express.methodOverride;
 
   // parse available methods
-  _.each(methods, function(method) {
+  _.each(methods, function (method) {
     this.logger.info([ '[ Express.processMethodOverride ] - Setting up methodOverride to use [',
                        method, '] header rules' ].join(' '));
   }, this);
@@ -471,7 +478,7 @@ Express.prototype.processMethodOverride = function () {
  * process processSession configuration
  *
  * @return {Boolean} true if all is ok false otherwise
- */   
+ */
 Express.prototype.processSession = function () {
   // config is ready ?
   if (!this.isReady()) {
@@ -492,10 +499,10 @@ Express.prototype.processSession = function () {
     if (s.options.genuuid) {
 
       // gen function
-      var gen = function() {
+      var gen = function () {
         return uuid.v4();
       };
-      
+
       // remove state flag non needed on session middleware options
       delete s.options.genuuid;
 
@@ -537,7 +544,7 @@ Express.prototype.processSession = function () {
       // BUT : we need to implement it
       this.logger.warning([ '[ Express.processSession ] -',
                             'Session storage rules given is not an uri type.',
-                            'Need to implement', type, 'process' ].join(' '))
+                            'Need to implement', type, 'process' ].join(' '));
     }
   }
 
@@ -551,7 +558,7 @@ Express.prototype.processSession = function () {
                     ].join(' '));
 
   // is production or staging mode ?
-  if (this.app.get('env') != 'development') {
+  if (this.app.get('env') !== 'development') {
     // force secure cookie
     s.options.cookie.secure = true;
   }
@@ -609,11 +616,11 @@ Express.prototype.processSecurity = function () {
     return false;
   }
 
-  // get security data 
+  // get security data
   var security = this.config.get('config').express.security;
 
   _.each(Object.keys(security), function (rule) {
-    // use rules ?        
+    // use rules ?
     if (!_.isEmpty(rule)) {
 
       // log message
@@ -646,7 +653,7 @@ Express.prototype.processPrerender = function () {
     return false;
   }
 
-  // get security data 
+  // get security data
   var pr      = this.config.get('config').prerender;
   var ready   = false;
 
@@ -676,7 +683,7 @@ Express.prototype.processPrerender = function () {
       ready = true;
     }
 
-    // has serviceUrl  ?
+    // has serviceUrl ?
     if (_.has(pr, 'blacklisted')) {
       // yes add blacklisted
       prerender.blacklisted(pr.blacklisted);
@@ -686,9 +693,9 @@ Express.prototype.processPrerender = function () {
                         'for prerender service' ].join(' '));
     }
 
-    // has serviceUrl  ?
+    // has serviceUrl ?
     if (_.has(pr, 'additionalAgents')) {
-      // yes add 
+      // yes add
       _.each(pr.additionalAgents, function (agent) {
         prerender.crawlerUserAgents.push(agent);
       });
@@ -697,7 +704,7 @@ Express.prototype.processPrerender = function () {
     // is ready to set ?
     if (ready) {
       // mandatory for hard force on prerender.io if server is behind a proxy
-      prerender.set('beforeRender', function(req, done) {
+      prerender.set('beforeRender', function (req, done) {
         var host = utils.getCorrectHost(req);
         host = host.replace('http://', '');
         req.headers.host = host;
@@ -712,33 +719,81 @@ Express.prototype.processPrerender = function () {
       // warning message have data but not all
       this.logger.warning([ '[ Express.processPrerender ] -',
                             'Setup failed. token or service url is missing' ].join(' '));
+      // is here an error occured
+      return false;
     }
   } else {
     // nothing to do but is seo process so build a message
-    this.logger.info('[ Express.processPrerender ] - nothing to process.');
+    this.logger.info('[ Express.processPrerender ] - nothing to process prerender is disabled.');
   }
 
   // default statement
   return true;
 };
 
+/**
+ * Process JWT token process for express
+ *
+ * @return {Boolean} true if all is ok false otherwise
+ */
+Express.prototype.processJwt = function () {
+  // config is ready ?
+  if (!this.isReady()) {
+    // error message
+    this.logger.error([ '[ Express.processJwt ] -',
+                        'Cannot process config. App is not ready.' ].join(' '));
+    // invalid statement
+    return false;
+  }
+
+  // get security data
+  var jwtoken      = this.config.get('config').jwt;
+
+  // all is ok ?
+  if (_.isBoolean(jwtoken.enable) && jwtoken.enable &&
+      _.isString(jwtoken.key) && !_.isEmpty(jwtoken.key)) {
+    // debug message
+    this.logger.debug('[ Express.processJwt ] - Try to process jwt key');
+    // set key
+    if (jwt.setKey(jwtoken.key)) {
+      // add autorize middleware for automatic check
+      this.app.use(jwt.isAuthorized(jwt));
+      // messsage
+      this.logger.info('[ Express.processJwt ] - Check json request autorization enabled.');
+      // enable auto encrypt json request
+      this.app.use(jwt.autoEncryptRequest(jwt));
+      // messsage
+      this.logger.info('[ Express.processJwt ] - Auto encrypt json response enabled.');
+      // enable auto decrypt json request
+      this.app.use(jwt.autoDecryptRequest(jwt));
+      // messsage
+      this.logger.info('[ Express.processJwt ] - Auto decrypt json request enabled.');
+    }
+  } else {
+    // message
+    this.logger.info('[ Express.processJwt ] - Nothing to process. jwt is disabled.');
+  }
+
+  // default statement
+  return true;
+};
 
 /**
  * Get current state of config load
  *
  * @return {Boolean} true if all is ok false otherwise
  */
-Express.prototype.isReady = function() {
+Express.prototype.isReady = function () {
   // default statement
   return this.state && this.config.state;
 };
 
 /**
  * Default configure option
- * 
+ *
  * @return {Boolean} true if all is ok false otherwise
  */
-Express.prototype.configure = function() {
+Express.prototype.configure = function () {
   // save current context
   var context   = this;
   // create async process
@@ -837,11 +892,17 @@ Express.prototype.configure = function() {
         throw 'Prerender setup failed.';
       }
 
-      // TODO => Implement https://github.com/auth0/node-jsonwebtoken for secure transaction between apps
-      /**
-       * Setting up router
-       */
-      context.logger.info('[ Express.configure ] - Setting up Router for current express app');
+      // middleware process
+      context.logger.banner([ '[ Express.configure ] - Initializing Express',
+                       '> Setting up Jwt crypt/decrypt ...' ].join(' '));
+
+      // setup stack error
+      if (!context.processJwt()) {
+        throw 'Jwt setup failed.';
+      }
+
+      // Setting up router
+      context.logger.banner('[ Express.configure ] - Setting up Router for current express app');
       // enable express router
       context.app.use(express.Router());
 
@@ -872,7 +933,7 @@ Express.prototype.configure = function() {
 /**
  * Set directory to use on express app
  *
- * @param {String) name nape of path for bind from config file
+ * @param {String} name name of path for bind from config file
  * @param {String} p path to use if we need to force the current path manually
  * @return {Boolean} true if success false otherwise
  */
@@ -886,18 +947,18 @@ Express.prototype.useDirectory = function (name, p) {
     // is relative path ?
     if (!path.isAbsolute(p)) {
       // normalize path
-      p = path.normalize([ process.cwd(), p ].join('/'));  
+      p = path.normalize([ process.cwd(), p ].join('/'));
     }
 
     // directory exist ?
     if (fs.existsSync(p)) {
-      
+
       // adding ? log it
       this.logger.info([ '[ Express.useDirectory ] - Adding directory', p,
                          'on express app' ].join(' '));
 
       // if views ?? process are different !!!
-      if (name != 'views') {
+      if (name !== 'views') {
         // set static directory
         this.app.use(express.static(p));
       } else {
@@ -956,7 +1017,7 @@ Express.prototype.removeMiddleware = function (name) {
  *
  * @param {String} name name of property
  * @param {Mixed} value value of property
- * @return {Object} current instance 
+ * @return {Object} current instance
  */
 Express.prototype.set = function (name, value) {
   // check requirements
