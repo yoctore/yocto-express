@@ -2,7 +2,6 @@
   "name": "yocto-express",
   "version": "1.0.0",
   "description": "Manage express setup for an node js app.",
-  "private": true,
   "scripts": {},
   "author": {
     "name": "Yocto SAS",

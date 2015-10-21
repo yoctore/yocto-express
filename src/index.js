@@ -103,36 +103,44 @@ Express.prototype.processBase = function () {
     return false;
   }
 
-  // setting port
-  this.app.set('port', this.config.get('config').port);
-  // log message
-  this.logger.info([ '[ Express.processBase ] - Setting port to [',
-                     this.app.get('port'), ']'
-                   ].join(' '));
+  // check some property
+  if (_.has(this.config.get('config'), 'port') &&
+      _.has(this.config.get('config'), 'app') &&
+      _.has(this.config.get('config'), 'env') &&
+      _.has(this.config.get('config'), 'host')) {
+    // setting port
+    this.app.set('port', this.config.get('config').port);
+    // log message
+    this.logger.info([ '[ Express.processBase ] - Setting port to [',
+                       this.app.get('port'), ']'
+                     ].join(' '));
 
-  // set the default name
-  this.app.set('app_name', _.words(this.config.get('config').app.name.toLowerCase()).join('-'));
-  // log message
-  this.logger.info([ '[ Express.processBase ] - Setting app name to [',
-                     this.app.get('app_name'), ']'
-                   ].join(' '));
+    // set the default name
+    this.app.set('app_name', _.words(this.config.get('config').app.name.toLowerCase()).join('-'));
+    // log message
+    this.logger.info([ '[ Express.processBase ] - Setting app name to [',
+                       this.app.get('app_name'), ']'
+                     ].join(' '));
 
-  // setting up env
-  this.app.set('env', this.config.get('config').env);
-  // log message
-  this.logger.info([ '[ Express.processBase ] - Setting env to [',
-                      this.app.get('env'), ']'
-                   ].join(' '));
+    // setting up env
+    this.app.set('env', this.config.get('config').env);
+    // log message
+    this.logger.info([ '[ Express.processBase ] - Setting env to [',
+                        this.app.get('env'), ']'
+                     ].join(' '));
 
-  // setting up host
-  this.app.set('host', this.config.get('config').host);
-  // log message
-  this.logger.info([ '[ Express.processBase ] - Setting host to [',
-                     this.app.get('host'), ']'
-                   ].join(' '));
+    // setting up host
+    this.app.set('host', this.config.get('config').host);
+    // log message
+    this.logger.info([ '[ Express.processBase ] - Setting host to [',
+                       this.app.get('host'), ']'
+                     ].join(' '));
+    // valid statement
+    return true;
+  }
 
-  // default statement
-  return true;
+  // invalid statement
+  return false;
 };
 
 /**
@@ -804,6 +812,7 @@ Express.prototype.configure = function () {
 
   // main process
   this.config.load().then(function (success) {
+
     // state is success
     context.state = _.isObject(success) && !_.isEmpty(success);
 
@@ -1043,7 +1052,7 @@ module.exports = function (c, l) {
     l = logger;
   }
 
-  // is a valid logger ?
+  // is a valid config ?
   if (_.isUndefined(c) || _.isNull(c)) {
     logger.warning('[ Express.constructor ] - Invalid config given. Use internal config');
     // assign

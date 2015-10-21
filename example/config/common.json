@@ -33,7 +33,7 @@
         "saveUninitialized" : true,
         "store" : {
           "instance" : "mongo",
-          "uri"  : "mongodb://user:pass@host:port/dbname",
+          "uri"  : "mongodb://localhost:27017/test",
           "type" : "uri"
         }
       }
