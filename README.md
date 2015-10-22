@@ -57,6 +57,7 @@ var e         = require('yocto-express')(config, logger);
 ## Next Step
 
 - Add passportJS on current app
+- Add Vhost usage & more
 
 ## Changelog
 
