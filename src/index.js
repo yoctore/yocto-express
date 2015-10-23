@@ -797,6 +797,144 @@ Express.prototype.isReady = function () {
 };
 
 /**
+ * Defaut method to process initialize without config loading.
+ *
+ * @param {Object} data to use
+ * @param {Boolean} isConfigInstance if is set to true this.config must be replace by data
+ */
+Express.prototype.configureWithoutLoad = function (data, isConfigInstance) {
+  // create async process
+  var deferred  = Q.defer();
+
+  // normalize a config instance
+  isConfigInstance = _.isBoolean(isConfigInstance) ? isConfigInstance : false;
+
+  // if is a config instance
+  if (isConfigInstance) {
+    // force rewrite config
+    this.config = data;
+    // state must to true
+    this.state  = true;
+  }
+
+  // process try/catch
+  try {
+    // setup base
+    if (!this.processBase()) {
+      throw 'Express base initialisation failed.';
+    }
+
+    // setup stack error
+    if (!this.processStackError()) {
+      throw 'Stack error setup failed.';
+    }
+
+    // setup stack error
+    if (!this.processPrettyHTML()) {
+      throw 'Pretty HTTML setup failed.';
+    }
+
+    // setup stack error
+    if (!this.processViewEngine()) {
+      throw 'View engine setup failed.';
+    }
+
+    // setup stack error
+    if (!this.processDirectory()) {
+      throw 'Directory setup failed.';
+    }
+
+    // setup stack error
+    if (!this.processFavicon()) {
+      throw 'Favicon setup failed.';
+    }
+
+    // setup stack error
+    if (!this.processCompression()) {
+      throw 'Compression setup failed.';
+    }
+
+    // setup stack error
+    if (!this.processJsonCallack()) {
+      throw 'JsonCallback setup failed.';
+    }
+
+    // setup stack error
+    if (!this.processCookieParser()) {
+      throw 'CookieParser setup failed.';
+    }
+
+    // setup stack error
+    if (!this.processBodyParser()) {
+      throw 'BodyParser setup failed.';
+    }
+
+    // setup stack error
+    if (!this.processMethodOverride()) {
+      throw 'MethodOverride setup failed.';
+    }
+
+    // setup stack error
+    if (!this.processSession()) {
+      throw 'Session setup failed.';
+    }
+
+    // setup stack error
+    if (!this.processMultipart()) {
+      throw 'Multipart setup failed.';
+    }
+
+    // middleware process
+    this.logger.banner([ '[ Express.configure ] - Initializing Express',
+                     '> Processing security rules ...' ].join(' '));
+
+    // setup stack error
+    if (!this.processSecurity()) {
+      throw 'Security setup failed.';
+    }
+
+    // middleware process
+    this.logger.banner([ '[ Express.configure ] - Initializing Express',
+                     '> Setting up Seo renderer system ...' ].join(' '));
+
+    // setup stack error
+    if (!this.processPrerender()) {
+      throw 'Prerender setup failed.';
+    }
+
+    // middleware process
+    this.logger.banner([ '[ Express.configure ] - Initializing Express',
+                     '> Setting up Jwt crypt/decrypt ...' ].join(' '));
+
+    // setup stack error
+    if (!this.processJwt()) {
+      throw 'Jwt setup failed.';
+    }
+
+    // Setting up router
+    this.logger.banner('[ Express.configure ] - Setting up Router for current express app');
+    // enable express router
+    this.app.use(express.Router());
+
+    // ok message
+    this.logger.info('[ Express.configure ] - Express is ready to use ....');
+    // all is okay so resolve
+    deferred.resolve(this.app);
+  } catch (e) {
+    // error message
+    this.logger.error([ '[ Express.configure ] -',
+                           'An Error occured during express initialization.',
+                           'Error is :', e, 'Operation aborted !'
+                         ] .join(' '));
+    // reject
+    deferred.reject(e);
+  }
+
+  // default statement
+  return deferred.promise;
+};
+
+/**
  * Default configure option
  *
  * @return {Boolean} true if all is ok false otherwise
@@ -812,122 +950,16 @@ Express.prototype.configure = function () {
 
   // main process
   this.config.load().then(function (success) {
-
     // state is success
     context.state = _.isObject(success) && !_.isEmpty(success);
-
-    // process try/catch
-    try {
-      // setup base
-      if (!context.processBase()) {
-        throw 'Express base initialisation failed.';
-      }
-
-      // setup stack error
-      if (!context.processStackError()) {
-        throw 'Stack error setup failed.';
-      }
-
-      // setup stack error
-      if (!context.processPrettyHTML()) {
-        throw 'Pretty HTTML setup failed.';
-      }
-
-      // setup stack error
-      if (!context.processViewEngine()) {
-        throw 'View engine setup failed.';
-      }
-
-      // setup stack error
-      if (!context.processDirectory()) {
-        throw 'Directory setup failed.';
-      }
-
-      // setup stack error
-      if (!context.processFavicon()) {
-        throw 'Favicon setup failed.';
-      }
-
-      // setup stack error
-      if (!context.processCompression()) {
-        throw 'Compression setup failed.';
-      }
-
-      // setup stack error
-      if (!context.processJsonCallack()) {
-        throw 'JsonCallback setup failed.';
-      }
-
-      // setup stack error
-      if (!context.processCookieParser()) {
-        throw 'CookieParser setup failed.';
-      }
-
-      // setup stack error
-      if (!context.processBodyParser()) {
-        throw 'BodyParser setup failed.';
-      }
-
-      // setup stack error
-      if (!context.processMethodOverride()) {
-        throw 'MethodOverride setup failed.';
-      }
-
-      // setup stack error
-      if (!context.processSession()) {
-        throw 'Session setup failed.';
-      }
-
-      // setup stack error
-      if (!context.processMultipart()) {
-        throw 'Multipart setup failed.';
-      }
-
-      // middleware process
-      context.logger.banner([ '[ Express.configure ] - Initializing Express',
-                       '> Processing security rules ...' ].join(' '));
-
-      // setup stack error
-      if (!context.processSecurity()) {
-        throw 'Security setup failed.';
-      }
-
-      // middleware process
-      context.logger.banner([ '[ Express.configure ] - Initializing Express',
-                       '> Setting up Seo renderer system ...' ].join(' '));
-
-      // setup stack error
-      if (!context.processPrerender()) {
-        throw 'Prerender setup failed.';
-      }
-
-      // middleware process
-      context.logger.banner([ '[ Express.configure ] - Initializing Express',
-                       '> Setting up Jwt crypt/decrypt ...' ].join(' '));
-
-      // setup stack error
-      if (!context.processJwt()) {
-        throw 'Jwt setup failed.';
-      }
-
-      // Setting up router
-      context.logger.banner('[ Express.configure ] - Setting up Router for current express app');
-      // enable express router
-      context.app.use(express.Router());
-
-      // ok message
-      context.logger.info('[ Express.configure ] - Express is ready to use ....');
-      // all is okay so resolve
-      deferred.resolve(context.app);
-    } catch (e) {
-      // error message
-      context.logger.error([ '[ Express.configure ] -',
-                             'An Error occured during express initialization.',
-                             'Error is :', e, 'Operation aborted !'
-                           ] .join(' '));
+    // process without load
+    context.configureWithoutLoad(success).then(function (wdata) {
+      // resolve
+      deferred.resolve(wdata);
+    }).catch(function (werror) {
       // reject
-      deferred.reject(e);
-    }
+      deferred.reject(werror);
+    });
   }).catch(function (error) {
     // error message
     context.logger.error('Invalid config given. Please check your config files');

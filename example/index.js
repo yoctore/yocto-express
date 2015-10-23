@@ -6,8 +6,8 @@ var util      = require('util');
 
 
 //e.config.set('base', './example/config');
-
-
+e.config.setConfigPath('./example/config');
+e.config.enableExpress();
 
 e.useDirectory('publiceeeeAA');
 e.useDirectory('publiceeeeAA', '/toto');
