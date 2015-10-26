@@ -20,6 +20,7 @@ var Q             = require('q');
 var MongoStore    = require('connect-mongo')(session);
 var prerender     = require('prerender-node');
 var jwt           = require('yocto-jwt');
+var cors          = require('cors');
 
 /**
  * manage Express setup
@@ -787,6 +788,40 @@ Express.prototype.processJwt = function () {
 };
 
 /**
+ * Process CORS process for express
+ *
+ * @return {Boolean} true if all is ok false otherwise
+ */
+Express.prototype.processCors = function () {
+  // config is ready ?
+  if (!this.isReady()) {
+    // error message
+    this.logger.error([ '[ Express.processCors ] -',
+                        'Cannot process config. App is not ready.' ].join(' '));
+    // invalid statement
+    return false;
+  }
+
+  // get security data
+  var enableCors      = this.config.get('config').cors;
+  // all is ok ?
+  if (_.isBoolean(enableCors) && enableCors) {
+    // debug message
+    this.logger.debug('[ Express.processCors ] - Try to enable CORS on app.');
+    // add cors
+    this.app.use(cors());
+    // message
+    this.logger.info('[ Express.processCors ] - CORS is enable for all routes.');
+  } else {
+    // message
+    this.logger.info('[ Express.processCors ] - Nothing to process. CORS is disabled.');
+  }
+
+  // default statement
+  return true;
+};
+
+/**
  * Get current state of config load
  *
  * @return {Boolean} true if all is ok false otherwise
@@ -893,6 +928,11 @@ Express.prototype.configureWithoutLoad = function (data, isConfigInstance) {
       throw 'Security setup failed.';
     }
 
+    // setup cors
+    if (!this.processCors()) {
+      throw 'Cors setup failed.';
+    }
+
     // middleware process
     this.logger.banner([ '[ Express.configure ] - Initializing Express',
                      '> Setting up Seo renderer system ...' ].join(' '));
@@ -952,6 +992,7 @@ Express.prototype.configure = function () {
   this.config.load().then(function (success) {
     // state is success
     context.state = _.isObject(success) && !_.isEmpty(success);
+    console.log(success);
     // process without load
     context.configureWithoutLoad(success).then(function (wdata) {
       // resolve

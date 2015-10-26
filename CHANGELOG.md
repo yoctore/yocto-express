@@ -1,4 +1,12 @@
-## 1.0.0
+## 1.2.0 (2015-23-10)
+
+- Add cors on express setup
+
+## 1.1.0 (2015-23-10)
+
+- Minor fixed
+
+## 1.0.0 (2015-23-10)
 
 - Add jwt token process
 - Minor fixes
