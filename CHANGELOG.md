@@ -1,4 +1,4 @@
-## 1.2.1 <=> 1.2.2 (2015-11-04)
+## 1.2.1 <=> 1.2.3 (2015-11-04)
 
 - Update package and add dynamic engine on express app
 
