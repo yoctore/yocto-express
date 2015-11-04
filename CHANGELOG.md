@@ -1,3 +1,7 @@
+## 1.2.1 <=> 1.2.2 (2015-11-04)
+
+- Update package and add dynamic engine on express app
+
 ## 1.2.0 (2015-23-10)
 
 - Add cors on express setup

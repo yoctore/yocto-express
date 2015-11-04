@@ -219,7 +219,7 @@ Express.prototype.processViewEngine = function () {
   var name = this.config.get('config').express.viewEngine || 'jade';
 
   // adding consolidatejs
-  this.app.engine(name, consolidate.swig);
+  this.app.engine(name, consolidate[name]);
 
   // change view engine
   this.app.set('view engine', name);
