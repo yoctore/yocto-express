@@ -1,3 +1,7 @@
+## 1.2.5 (2015-11-06)
+
+- Remove temp CSRF configuration for an angular js. because token was lost between GET & POST request
+
 ## 1.2.1 <=> 1.2.4 (2015-11-04)
 
 - Update package and add dynamic engine on express app

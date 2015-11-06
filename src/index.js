@@ -630,7 +630,7 @@ Express.prototype.processSecurity = function () {
 
   _.each(Object.keys(security), function (rule) {
     // use rules ?
-    if (!_.isEmpty(rule)) {
+    if (!_.isEmpty(rule) && rule !== 'csrf') {
 
       // log message
       this.logger.info([ '[ Express.processSecurity ] - Setting up [', rule.toUpperCase(),
