@@ -1,7 +1,7 @@
 var logger    = require('yocto-logger');
 var config    = require('yocto-config')(logger);
 
-var e         = require('../src')(config, logger);
+var e         = require('../dist')(config, logger);
 var util      = require('util');
 
 
