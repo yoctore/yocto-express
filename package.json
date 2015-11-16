@@ -1,6 +1,6 @@
 {
   "name": "yocto-express",
-  "version": "1.2.12",
+  "version": "1.2.13",
   "description": "Manage express setup for an node js app.",
   "scripts": {},
   "author": {
