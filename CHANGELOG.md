@@ -1,3 +1,7 @@
+## -> 1.2.11 (2015-11-06)
+
+- Fix / adjust / remove lot of comment and log.
+
 ## 1.2.5 (2015-11-06)
 
 - Remove temp CSRF configuration for an angular js. because token was lost between GET & POST request

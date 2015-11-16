@@ -992,7 +992,7 @@ Express.prototype.configure = function () {
   this.config.load().then(function (success) {
     // state is success
     context.state = _.isObject(success) && !_.isEmpty(success);
-    console.log(success);
+
     // process without load
     context.configureWithoutLoad(success).then(function (wdata) {
       // resolve
