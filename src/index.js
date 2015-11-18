@@ -571,9 +571,12 @@ Express.prototype.processSession = function () {
     // force secure cookie
     s.options.cookie.secure = true;
   }
-
+  // default session
+  var sessionInstance = session(s.options);
   // process assignement
-  this.app.use(session(s.options));
+  this.app.use(sessionInstance);
+  // expose session on app for some case of usage
+  this.app.set('session', sessionInstance);
 
   // default statement
   return true;

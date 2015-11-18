@@ -1,3 +1,7 @@
+## -> 1.3.0 (2015-11-18)
+
+- Expose session on app
+
 ## -> 1.2.11 (2015-11-06)
 
 - Fix / adjust / remove lot of comment and log.
