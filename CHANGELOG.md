@@ -1,3 +1,7 @@
+## 1.3.1 (2015-11-27)
+
+- Maj packages
+
 ## -> 1.3.0 (2015-11-18)
 
 - Expose session on app
