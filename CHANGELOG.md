@@ -1,3 +1,7 @@
+## 1.4.0 (2015-12-01)
+
+- Expose jwt on app
+
 ## 1.3.2 (2015-12-01)
 
 - Change jwt instance to correct usage

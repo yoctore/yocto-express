@@ -215,6 +215,7 @@ Express.prototype.processViewEngine = function () {
     return false;
   }
 
+  // current engine name
   var name = this.config.get('config').express.viewEngine || 'jade';
 
   // adding consolidatejs
@@ -780,6 +781,8 @@ Express.prototype.processJwt = function () {
       this.app.use(jwt.autoDecryptRequest(jwt));
       // messsage
       this.logger.info('[ Express.processJwt ] - Auto decrypt json request enabled.');
+      // expose jwt on app
+      this.app.set('jwt', jwt);
     }
   } else {
     // message
