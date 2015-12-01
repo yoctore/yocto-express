@@ -749,48 +749,66 @@ Express.prototype.processPrerender = function () {
  * @return {Boolean} true if all is ok false otherwise
  */
 Express.prototype.processJwt = function () {
+  // create async process
+  var deferred = Q.defer();
   // config is ready ?
   if (!this.isReady()) {
     // error message
     this.logger.error([ '[ Express.processJwt ] -',
                         'Cannot process config. App is not ready.' ].join(' '));
     // invalid statement
-    return false;
+    deferred.reject();
   }
 
   // get security data
   var jwtoken   = this.config.get('config').jwt;
   // required jwt here for custom logger
   var jwt       = require('yocto-jwt')(this.logger);
+
   // all is ok ?
   if (_.isBoolean(jwtoken.enable) && jwtoken.enable &&
       _.isString(jwtoken.key) && !_.isEmpty(jwtoken.key)) {
     // debug message
     this.logger.debug('[ Express.processJwt ] - Try to process jwt key');
-    // set key
-    if (jwt.setKey(jwtoken.key)) {
-      // add autorize middleware for automatic check
-      this.app.use(jwt.isAuthorized(jwt));
-      // messsage
-      this.logger.info('[ Express.processJwt ] - Check json request autorization enabled.');
-      // enable auto encrypt json request
-      this.app.use(jwt.autoEncryptRequest(jwt));
-      // messsage
-      this.logger.info('[ Express.processJwt ] - Auto encrypt json response enabled.');
-      // enable auto decrypt json request
-      this.app.use(jwt.autoDecryptRequest(jwt));
-      // messsage
-      this.logger.info('[ Express.processJwt ] - Auto decrypt json request enabled.');
-      // expose jwt on app
-      this.app.set('jwt', jwt);
-    }
+    // set current algorithm
+    jwt.algorithm(jwtoken.algorithm || 'HS256');
+
+    // load item
+    jwt.load().then(function () {
+      // set key
+      if (jwt.setKey(jwtoken.key)) {
+        // add autorize middleware for automatic check
+        this.app.use(jwt.isAuthorized(jwt));
+        // messsage
+        this.logger.info('[ Express.processJwt ] - Check json request autorization enabled.');
+        // enable auto encrypt json request
+        this.app.use(jwt.autoEncryptRequest(jwt));
+        // messsage
+        this.logger.info('[ Express.processJwt ] - Auto encrypt json response enabled.');
+        // enable auto decrypt json request
+        this.app.use(jwt.autoDecryptRequest(jwt));
+        // messsage
+        this.logger.info('[ Express.processJwt ] - Auto decrypt json request enabled.');
+        // expose jwt on app
+        this.app.set('jwt', jwt);
+        // resolve and continue
+        deferred.resolve();
+      }
+    }.bind(this)).catch(function (error) {
+      // log error message
+      this.logger.error(error);
+      // reject
+      deferred.reject(error);
+    }.bind(this));
   } else {
     // message
     this.logger.info('[ Express.processJwt ] - Nothing to process. jwt is disabled.');
+    // resolve and continue
+    deferred.resolve();
   }
 
   // default statement
-  return true;
+  return deferred.promise;
 };
 
 /**
@@ -870,17 +888,17 @@ Express.prototype.configureWithoutLoad = function (data, isConfigInstance) {
       throw 'Stack error setup failed.';
     }
 
-    // setup stack error
+    // setup pretty html
     if (!this.processPrettyHTML()) {
       throw 'Pretty HTTML setup failed.';
     }
 
-    // setup stack error
+    // setup view engine
     if (!this.processViewEngine()) {
       throw 'View engine setup failed.';
     }
 
-    // setup stack error
+    // setup favicon
     if (!this.processDirectory()) {
       throw 'Directory setup failed.';
     }
@@ -890,37 +908,37 @@ Express.prototype.configureWithoutLoad = function (data, isConfigInstance) {
       throw 'Favicon setup failed.';
     }
 
-    // setup stack error
+    // setup compressions
     if (!this.processCompression()) {
       throw 'Compression setup failed.';
     }
 
-    // setup stack error
+    // setup json callback
     if (!this.processJsonCallack()) {
       throw 'JsonCallback setup failed.';
     }
 
-    // setup stack error
+    // setup cookie parser
     if (!this.processCookieParser()) {
       throw 'CookieParser setup failed.';
     }
 
-    // setup stack error
+    // setup body parser
     if (!this.processBodyParser()) {
       throw 'BodyParser setup failed.';
     }
 
-    // setup stack error
+    // setup method override
     if (!this.processMethodOverride()) {
       throw 'MethodOverride setup failed.';
     }
 
-    // setup stack error
+    // setup session
     if (!this.processSession()) {
       throw 'Session setup failed.';
     }
 
-    // setup stack error
+    // setup multi part
     if (!this.processMultipart()) {
       throw 'Multipart setup failed.';
     }
@@ -929,7 +947,7 @@ Express.prototype.configureWithoutLoad = function (data, isConfigInstance) {
     this.logger.banner([ '[ Express.configure ] - Initializing Express',
                      '> Processing security rules ...' ].join(' '));
 
-    // setup stack error
+    // setup security
     if (!this.processSecurity()) {
       throw 'Security setup failed.';
     }
@@ -943,7 +961,7 @@ Express.prototype.configureWithoutLoad = function (data, isConfigInstance) {
     this.logger.banner([ '[ Express.configure ] - Initializing Express',
                      '> Setting up Seo renderer system ...' ].join(' '));
 
-    // setup stack error
+    // setup prenrender
     if (!this.processPrerender()) {
       throw 'Prerender setup failed.';
     }
@@ -952,20 +970,21 @@ Express.prototype.configureWithoutLoad = function (data, isConfigInstance) {
     this.logger.banner([ '[ Express.configure ] - Initializing Express',
                      '> Setting up Jwt crypt/decrypt ...' ].join(' '));
 
-    // setup stack error
-    if (!this.processJwt()) {
-      throw 'Jwt setup failed.';
-    }
+    // setup jwt
+    this.processJwt().then(function () {
+      // Setting up router
+      this.logger.banner('[ Express.configure ] - Setting up Router for current express app');
+      // enable express router
+      this.app.use(express.Router());
 
-    // Setting up router
-    this.logger.banner('[ Express.configure ] - Setting up Router for current express app');
-    // enable express router
-    this.app.use(express.Router());
-
-    // ok message
-    this.logger.info('[ Express.configure ] - Express is ready to use ....');
-    // all is okay so resolve
-    deferred.resolve(this.app);
+      // ok message
+      this.logger.info('[ Express.configure ] - Express is ready to use ....');
+      // all is okay so resolve
+      deferred.resolve(this.app);
+    }.bind(this)).catch(function (error) {
+      // reject
+      deferred.reject([ 'Jwt setup failed.', error ].join(' '));
+    });
   } catch (e) {
     // error message
     this.logger.error([ '[ Express.configure ] -',
