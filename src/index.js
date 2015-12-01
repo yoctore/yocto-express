@@ -19,7 +19,6 @@ var lusca         = require('lusca');
 var Q             = require('q');
 var MongoStore    = require('connect-mongo')(session);
 var prerender     = require('prerender-node');
-var jwt           = require('yocto-jwt');
 var cors          = require('cors');
 
 /**
@@ -759,8 +758,9 @@ Express.prototype.processJwt = function () {
   }
 
   // get security data
-  var jwtoken      = this.config.get('config').jwt;
-
+  var jwtoken   = this.config.get('config').jwt;
+  // required jwt here for custom logger
+  var jwt       = require('yocto-jwt')(this.logger);
   // all is ok ?
   if (_.isBoolean(jwtoken.enable) && jwtoken.enable &&
       _.isString(jwtoken.key) && !_.isEmpty(jwtoken.key)) {

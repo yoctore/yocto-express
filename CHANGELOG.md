@@ -1,3 +1,7 @@
+## 1.3.2 (2015-12-01)
+
+- Change jwt instance to correct usage
+
 ## 1.3.1 (2015-11-27)
 
 - Maj packages

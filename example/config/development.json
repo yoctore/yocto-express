@@ -26,5 +26,9 @@
         }
       }
     }
+  },
+  "jwt" : {
+    "enable" : true,
+    "key" : "REREER"
   }
 }
