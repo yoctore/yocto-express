@@ -1,3 +1,7 @@
+## 1.5.1 (2015-12-02)
+
+- NPM not publish my dist file -- republish
+
 ## 1.5.0 (2015-12-01)
 
 - Change jwt setup to process algorithm choice & add load method to process self signed cert for encryption
