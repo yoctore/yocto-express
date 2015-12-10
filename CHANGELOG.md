@@ -1,5 +1,10 @@
-## 1.5.1 (2015-12-02)
+## 1.7.0 (2015-12-10)
 
+- Add support for https.
+
+## 1.5.0 -> 1.6.1 (2015-12-02)
+
+- Fixes (comment, little enchancement)
 - NPM not publish my dist file -- republish
 
 ## 1.5.0 (2015-12-01)

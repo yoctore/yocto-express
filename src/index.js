@@ -20,6 +20,7 @@ var Q             = require('q');
 var MongoStore    = require('connect-mongo')(session);
 var prerender     = require('prerender-node');
 var cors          = require('cors');
+var https         = require('https');
 
 /**
  * manage Express setup
@@ -104,16 +105,10 @@ Express.prototype.processBase = function () {
   }
 
   // check some property
-  if (_.has(this.config.get('config'), 'port') &&
-      _.has(this.config.get('config'), 'app') &&
+  if (_.has(this.config.get('config'), 'app') &&
       _.has(this.config.get('config'), 'env') &&
-      _.has(this.config.get('config'), 'host')) {
-    // setting port
-    this.app.set('port', this.config.get('config').port);
-    // log message
-    this.logger.info([ '[ Express.processBase ] - Setting port to [',
-                       this.app.get('port'), ']'
-                     ].join(' '));
+      _.has(this.config.get('config'), 'host') &&
+      _.has(this.config.get('config'), 'protocol')) {
 
     // set the default name
     this.app.set('app_name', _.words(this.config.get('config').app.name.toLowerCase()).join('-'));
@@ -135,6 +130,48 @@ Express.prototype.processBase = function () {
     this.logger.info([ '[ Express.processBase ] - Setting host to [',
                        this.app.get('host'), ']'
                      ].join(' '));
+
+    // setting up protocol
+    this.app.set('protocol', this.config.get('config').protocol.type || 'http');
+    // log message
+    this.logger.info([ '[ Express.processBase ] - Setting protocol to [',
+                       this.app.get('protocol'), ']'
+                     ].join(' '));
+
+    // setting port
+    this.app.set('port', this.config.get('config').protocol.port || 3000);
+    // log message
+    this.logger.info([ '[ Express.processBase ] - Setting port to [',
+                       this.app.get('port'), ']'
+                     ].join(' '));
+
+    // is https ?
+    if (this.app.get('protocol') === 'https') {
+      // get path of cert & key file
+      var keyPath   = this.config.get('config').protocol.certificate.key;
+      var certPath  = this.config.get('config').protocol.certificate.cert;
+
+      // normalize keyPath and cert Path
+      keyPath   = !path.isAbsolute(keyPath)  ? path.normalize([ process.cwd(), keyPath ].join('/'))
+                                             : keyPath;
+      certPath  = !path.isAbsolute(certPath) ? path.normalize([ process.cwd(), certPath ].join('/'))
+                                             : certPath;
+
+      // generate credidentials
+      var privateKey  = fs.readFileSync(keyPath, 'utf8');
+      var certificate = fs.readFileSync(certPath, 'utf8');
+      // build credentials object for server
+      var credentials = { key : privateKey, cert : certificate };
+
+      // add override listen method to lisen to https
+      this.app.listen = function () {
+        // create server
+        var server = https.createServer(credentials, this);
+        // return new server with data
+        return server.listen.apply(server, arguments);
+      }.bind(this.app);
+    }
+
     // valid statement
     return true;
   }

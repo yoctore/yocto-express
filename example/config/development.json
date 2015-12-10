@@ -1,4 +1,12 @@
 {
+  "protocol" : {
+    "type" : "https",
+    "port" : 8000,
+    "certificate" : {
+      "key"  : "./example/certificate/server.key",
+      "cert" : "./example/certificate/server.crt"
+    }
+  },
   "app" : {
     "name" : "my AP DEV &&&&&& é'é'éèç!",
     "stackError" : false
