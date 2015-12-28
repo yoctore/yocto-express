@@ -602,12 +602,6 @@ Express.prototype.processSession = function () {
                       'Config data used for session setting are : ',
                       utils.obj.inspect(s.options)
                     ].join(' '));
-
-  // is production or staging mode ?
-  if (this.app.get('env') !== 'development') {
-    // force secure cookie
-    s.options.cookie.secure = true;
-  }
   // default session
   var sessionInstance = session(s.options);
   // process assignement
