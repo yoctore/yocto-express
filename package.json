@@ -1,6 +1,6 @@
 {
   "name": "yocto-express",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "description": "Manage express setup for an node js app.",
   "scripts": {},
   "author": {
@@ -31,10 +31,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/yocto-node-modules/yocto-express.git"
+    "url": "https://github.com/yoctore/yocto-express.git"
   },
   "bugs": {
-    "url": "https://gitlab.com/yocto-node-modules/yocto-express/issues"
+    "url": "https://github.com/yoctore/yocto-express/issues"
   },
   "files": [
     "dist",
