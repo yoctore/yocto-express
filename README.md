@@ -63,4 +63,4 @@ var e         = require('yocto-express')(config, logger);
 
 ## Changelog
 
-All history is [here](https://gitlab.com/yocto-node-modules/yocto-express/blob/master/CHANGELOG.md)
+All history is [here](https://github.com/yoctore/yocto-express/blob/master/CHANGELOG.md)
