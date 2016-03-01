@@ -1,3 +1,7 @@
+## 1.7.4 (2016-03-01)
+
+- Change utils usage with prerender
+
 ## 1.7.0 (2015-12-10)
 
 - Add support for https.
