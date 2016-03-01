@@ -1,4 +1,4 @@
-## 1.7.4 (2016-03-01)
+## 1.7.5 (2016-03-01)
 
 - Change utils usage with prerender
 

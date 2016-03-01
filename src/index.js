@@ -749,8 +749,12 @@ Express.prototype.processPrerender = function () {
       // mandatory for hard force on prerender.io if server is behind a proxy
       prerender.set('beforeRender', function (req, done) {
         var host = utils.request.getHost(req);
-        host = host.replace('http://', '');
-        req.headers.host = host;
+        // only if is a string ---
+        if (_.isString(host)) {
+          host = host.replace('http://', '');
+          // change headers host
+          req.headers.host = host;
+        }
         done();
       });
 
