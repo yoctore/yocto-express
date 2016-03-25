@@ -1,4 +1,8 @@
 ![alt text](https://david-dm.org/yoctore/yocto-express.svg "Dependencies Status")
+[![Code Climate](https://codeclimate.com/github/yoctore/yocto-express/badges/gpa.svg)](https://codeclimate.com/github/yoctore/yocto-express)
+[![Test Coverage](https://codeclimate.com/github/yoctore/yocto-express/badges/coverage.svg)](https://codeclimate.com/github/yoctore/yocto-express/coverage)
+[![Issue Count](https://codeclimate.com/github/yoctore/yocto-express/badges/issue_count.svg)](https://codeclimate.com/github/yoctore/yocto-express)
+[![Build Status](https://travis-ci.org/yoctore/yocto-express.svg?branch=master)](https://travis-ci.org/yoctore/yocto-express)
 
 ## Overview
 

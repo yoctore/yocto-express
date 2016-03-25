@@ -746,18 +746,9 @@ Express.prototype.processPrerender = function () {
 
     // is ready to set ?
     if (ready) {
-      // mandatory for hard force on prerender.io if server is behind a proxy
-      prerender.set('beforeRender', function (req, done) {
-        var host = utils.request.getHost(req);
-        // only if is a string ---
-        if (_.isString(host)) {
-          host = host.replace('http://', '');
-          // change headers host
-          req.headers.host = host;
-        }
-        done();
-      });
-
+      // Here before it's look like that we need to process a before render but is local
+      // installation case it looks like that we dont need this so we decide to
+      // delete it and use a specific seo render program
       // nothing to do but is seo process so build a message
       this.logger.info('[ Express.processPrerender ] - Setting up on express.');
       // use prerender
@@ -884,6 +875,48 @@ Express.prototype.processCors = function () {
 };
 
 /**
+ * Enable redirect rules for current application defined on config file
+ */
+Express.prototype.processRedirect = function () {
+  // config is ready ?
+  if (!this.isReady()) {
+    // error message
+    this.logger.error([ '[ Express.processRedirect ] -',
+                        'Cannot process config. App is not ready.' ].join(' '));
+    // invalid statement
+    return false;
+  }
+
+  // get redirect data
+  var redirect = this.config.get('config').redirect;
+  // disable www redirect
+  if (redirect) {
+    // log message
+    this.logger.info('[ Express.processRedirect ] - redirect rules are defined, processs it ...');
+    // has redirect ?
+    if (redirect.www) {
+      // log message
+      this.logger.info('[ Express.processRedirect ] - Enable 301 www redirection ...');
+      // set it
+      this.app.use(function (req, res, next) {
+        // get current host
+        var host = utils.request.getHost(req);
+        // check it
+        if (!_.startsWith(host, 'www.')) {
+          // default redirect
+          return res.redirect(301, [ req.protocol, '://www.', host, req.originalUrl ].join(''));
+        }
+        // do next process
+        next();
+      });
+    }
+  }
+
+  // default statement
+  return true;
+};
+
+/**
  * Get current state of config load
  *
  * @return {Boolean} true if all is ok false otherwise
@@ -979,6 +1012,11 @@ Express.prototype.configureWithoutLoad = function (data, isConfigInstance) {
     // setup multi part
     if (!this.processMultipart()) {
       throw 'Multipart setup failed.';
+    }
+
+    // setup redirect rules
+    if (!this.processRedirect()) {
+      throw 'Redirect setup failed.';
     }
 
     // middleware process

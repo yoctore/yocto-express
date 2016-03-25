@@ -1,6 +1,6 @@
 {
   "protocol" : {
-    "type" : "https",
+    "type" : "http",
     "port" : 8000,
     "certificate" : {
       "key"  : "./example/certificate/server.key",
@@ -37,6 +37,14 @@
   },
   "jwt" : {
     "enable" : true,
-    "key" : "REREER"
+    "key" : "REREER",
+    "ips"           : [ "*" ]
+  },
+  "prerender" : {
+    "prerenderServiceUrl" : "http://my-url.com:1234",
+    "additionalAgents"    : [ "woobot"]
+  },
+  "redirect" : {
+    "www" : true
   }
 }

@@ -12,9 +12,9 @@ e.config.enableExpress();
 e.useDirectory('publiceeeeAA');
 e.useDirectory('publiceeeeAA', '/toto');
 e.configure().then(function (success) {
-  e.getApp().listen(8000);
+  e.getApp().listen(3000);
   console.log(success);
-  console.log('session =>', e.getApp().get('session'));
+  //console.log('session =>', e.getApp().get('session'));
 }).catch(function (error) {
   console.log(error);
 });
