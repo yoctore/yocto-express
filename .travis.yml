@@ -10,7 +10,7 @@ addons:
     packages:
     - g++-4.8
   code_climate:
-    repo_token: 9a0524d06a72b026a3d9b1ad9c889d3e11a69311be659448086a0327651439f2
+    repo_token: d5feb9e3dcb824e19b6c4362549ede9d50032e8ef776121a062881b998561b56
 deploy:
   provider: npm
   email: technique@yocto.re
