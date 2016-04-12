@@ -702,6 +702,19 @@ Express.prototype.processPrerender = function () {
 
   // is defined ?
   if (!_.isUndefined(pr)) {
+    // process change host before
+    prerender.set('beforeRender', function (req, done) {
+      var host = utils.request.getHost(req);
+      console.log('render debug =>', host);
+      if (_.isString(host)) {
+        host = host.replace('http://', '');
+        // change headers host
+        req.headers.host = host;
+      }
+      // done do next
+      done();
+    });
+
     // has token ?
     if (_.has(pr, 'prerenderToken')) {
       // yes so set

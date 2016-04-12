@@ -41,10 +41,10 @@
     "ips"           : [ "*" ]
   },
   "prerender" : {
-    "prerenderServiceUrl" : "http://my-url.com:1234",
+    "prerenderServiceUrl" : "http://seo.y8.re",
     "additionalAgents"    : [ "woobot"]
   },
   "redirect" : {
-    "www" : true
+    "www" : false
   }
 }

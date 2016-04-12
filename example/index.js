@@ -12,8 +12,15 @@ e.config.enableExpress();
 e.useDirectory('publiceeeeAA');
 e.useDirectory('publiceeeeAA', '/toto');
 e.configure().then(function (success) {
-  e.getApp().listen(3000);
-  console.log(success);
+ console.log(e.getApp());
+ /*e.getApp().use(function(req, res) {
+  res.send(200);
+ });*/
+e.getApp().get('/', function(req, res){
+  res.send('hello world');
+});
+ e.getApp().listen(3000);
+  //console.log(success);
   //console.log('session =>', e.getApp().get('session'));
 }).catch(function (error) {
   console.log(error);
