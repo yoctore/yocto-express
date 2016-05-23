@@ -578,6 +578,30 @@ Express.prototype.processSession = function () {
     // is uri ? and is String ? ant not empty ?
     if (instance === 'mongo' && type === 'uri' &&
         _.isString(opStore.uri) && !_.isEmpty(opStore.uri)) {
+
+      // check if property sslCA exist
+      if (_.has(opStore.options, 'server.sslCA') && _.isString(opStore.options.server.sslCA)) {
+        // create buffer of this file
+        opStore.options.server.sslCA = [
+          fs.readFileSync(path.normalize(process.cwd() + '/' + opStore.options.server.sslCA))
+        ];
+      }
+
+      // check if property sslKey exist
+      if (_.has(opStore.options, 'server.sslKey') && _.isString(opStore.options.server.sslKey)) {
+
+        // create buffer of this file
+        opStore.options.server.sslKey =
+          fs.readFileSync(path.normalize(process.cwd()  + '/' + opStore.options.server.sslKey));
+      }
+
+      // check if property sslCert exist
+      if (_.has(opStore.options, 'server.sslCert') && _.isString(opStore.options.server.sslCert)) {
+        // create buffer of this file
+        opStore.options.server.sslCert =
+          fs.readFileSync(path.normalize(process.cwd()  + '/' + opStore.options.server.sslCert));
+      }
+
       // set store data
       _.extend(s.options, {
         store : new MongoStore({
