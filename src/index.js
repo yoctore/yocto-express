@@ -138,11 +138,14 @@ Express.prototype.processBase = function () {
                        this.app.get('protocol'), ']'
                      ].join(' '));
 
+    var port = this.config.get('config').protocol.port || 3000;
+
     // setting port
-    this.app.set('port', this.config.get('config').protocol.port || 3000);
+    this.app.set('port', port);
+
     // log message
     this.logger.info([ '[ Express.processBase ] - Setting port to [',
-                       this.app.get('port'), ']'
+                       port, ']'
                      ].join(' '));
 
     // is https ?
@@ -738,7 +741,6 @@ Express.prototype.processPrerender = function () {
     // process change host before
     prerender.set('beforeRender', function (req, done) {
       var host = utils.request.getHost(req);
-      console.log('render debug =>', host);
       if (_.isString(host)) {
         host = host.replace('http://', '');
         // change headers host
@@ -849,6 +851,8 @@ Express.prototype.processJwt = function () {
     jwt.load().then(function () {
       // add alowed ips
       jwt.allowedIps(jwtoken.ips || []);
+      // add alowed routes
+      jwt.addAllowedRoutes(jwtoken.allowedRoutes || []);
 
       // set key
       if (jwt.setKey(jwtoken.key)) {
@@ -1284,4 +1288,3 @@ module.exports = function (c, l) {
   // default statement
   return new (Express)(c, l);
 };
-

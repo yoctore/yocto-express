@@ -1,3 +1,7 @@
+## 1.8.3 (2016-03-01)
+
+- Call jwt method to allow specific routes
+
 ## 1.7.5 (2016-03-01)
 
 - Change utils usage with prerender
