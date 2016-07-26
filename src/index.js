@@ -293,7 +293,7 @@ Express.prototype.processDirectory = function () {
   _.each(directories, function (d) {
     // process
     this.useDirectory(_.first(Object.keys(d)));
-  }, this);
+  }.bind(this));
 
   // default statement
   return true;
@@ -489,7 +489,7 @@ Express.prototype.processBodyParser = function () {
 
     // setting up body parser
     this.app.use(bodyParser[rule](r));
-  }, this);
+  }.bind(this));
 
   // default statement
   return true;
@@ -517,7 +517,7 @@ Express.prototype.processMethodOverride = function () {
   _.each(methods, function (method) {
     this.logger.info([ '[ Express.processMethodOverride ] - Setting up methodOverride to use [',
                        method, '] header rules' ].join(' '));
-  }, this);
+  }.bind(this));
 
   // default statement
   return true;
@@ -711,7 +711,7 @@ Express.prototype.processSecurity = function () {
         }
       }
     }
-  }, this);
+  }.bind(this));
 
   // default statement
   return true;

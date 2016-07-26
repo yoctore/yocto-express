@@ -1,3 +1,8 @@
+## 2.0.0 (2016-07-26)
+
+- migrate lodash to v4.14.0
+- update packages.json
+
 ## 1.8.3 (2016-03-01)
 
 - Call jwt method to allow specific routes
