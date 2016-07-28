@@ -860,14 +860,20 @@ Express.prototype.processJwt = function () {
         this.app.use(jwt.isAuthorized());
         // messsage
         this.logger.info('[ Express.processJwt ] - Check json request autorization enabled.');
-        // enable auto encrypt json request
-        this.app.use(jwt.autoEncryptRequest());
-        // messsage
-        this.logger.info('[ Express.processJwt ] - Auto encrypt json response enabled.');
-        // enable auto decrypt json request
-        this.app.use(jwt.autoDecryptRequest());
-        // messsage
-        this.logger.info('[ Express.processJwt ] - Auto decrypt json request enabled.');
+        // check if middleware should be set
+        if (jwtoken.autoEncryptRequest) {
+          // enable auto encrypt json request
+          this.app.use(jwt.autoEncryptRequest());
+          // messsage
+          this.logger.info('[ Express.processJwt ] - Auto encrypt json response enabled.');
+        }
+        // check if middleware should be set
+        if (jwtoken.autoDecryptRequest) {
+          // enable auto decrypt json request
+          this.app.use(jwt.autoDecryptRequest());
+          // messsage
+          this.logger.info('[ Express.processJwt ] - Auto decrypt json request enabled.');
+        }
         // expose jwt on app
         this.app.set('jwt', jwt);
         // resolve and continue

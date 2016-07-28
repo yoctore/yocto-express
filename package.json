@@ -1,6 +1,6 @@
 {
   "name": "yocto-express",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Manage express setup for an node js app.",
   "scripts": {},
   "author": {
@@ -54,7 +54,7 @@
   "dependencies": {
     "body-parser": "^1.15.1",
     "compression": "^1.4.4",
-    "connect-mongo": "^1.1.0",
+    "connect-mongo": "^1.3.2",
     "connect-multiparty": "^2.0.0",
     "consolidate": "^0.14.1",
     "cookie-parser": "^1.4.1",
@@ -71,7 +71,7 @@
     "serve-favicon": "^2.2.1",
     "uuid": "^2.0.2",
     "yocto-config": "^1.7.1",
-    "yocto-jwt": "^2.0.0",
+    "yocto-jwt": "^2.0.1",
     "yocto-logger": "^1.1.6",
     "yocto-utils": "^1.2.8"
   },

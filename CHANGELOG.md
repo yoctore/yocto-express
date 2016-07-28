@@ -1,3 +1,7 @@
+## 2.0.1 (2016-07-28)
+
+- Add possibilities to not set jwt middleware : autoEncryptRequest and autoDecryptRequest
+
 ## 2.0.0 (2016-07-26)
 
 - migrate lodash to v4.14.0
