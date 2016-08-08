@@ -1,3 +1,7 @@
+## 2.0.2 (2016-08-08)
+
+- Can enable or disable security
+
 ## 2.0.1 (2016-07-28)
 
 - Add possibilities to not set jwt middleware : autoEncryptRequest and autoDecryptRequest

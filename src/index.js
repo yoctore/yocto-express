@@ -677,6 +677,7 @@ Express.prototype.processMultipart = function () {
  * @return {Boolean} true if all is ok false otherwise
  */
 Express.prototype.processSecurity = function () {
+
   // config is ready ?
   if (!this.isReady()) {
     // error message
@@ -689,29 +690,33 @@ Express.prototype.processSecurity = function () {
   // get security data
   var security = this.config.get('config').express.security;
 
-  // parse all object keys
-  _.each(Object.keys(security), function (rule) {
-    // use rules ?
-    if (!_.isEmpty(rule) && rule !== 'csrf') {
+  // security is enable ?
+  if (security.enable) {
+    // parse all object keys
+    _.each(Object.keys(security), function (rule) {
+      // use rules ?
+      if (!_.isEmpty(rule) && rule !== 'csrf') {
 
-      // log message
-      this.logger.info([ '[ Express.processSecurity ] - Setting up [', rule.toUpperCase(),
-                         '] rules for current express app' ].join(' '));
-      this.logger.debug([ '[ Express.processSecurity ] - Config data used for', rule.toUpperCase(),
-                          'setting are : ', utils.obj.inspect(security[rule]) ].join(' '));
+        // log message
+        this.logger.info([ '[ Express.processSecurity ] - Setting up [', rule.toUpperCase(),
+                           '] rules for current express app' ].join(' '));
+        this.logger.debug([ '[ Express.processSecurity ] - Config data used for',
+                            rule.toUpperCase(),
+                            'setting are : ', utils.obj.inspect(security[rule]) ].join(' '));
 
-      if (rule !== 'nosniff') {
-        // process
-        this.app.use(lusca[rule](security[rule]));
-      } else {
-        // enable without param
-        if (_.isBoolean(security[rule])) {
-          // enable with default construct
-          this.app.use(lusca[rule]());
+        if (rule !== 'nosniff') {
+          // process
+          this.app.use(lusca[rule](security[rule]));
+        } else {
+          // enable without param
+          if (_.isBoolean(security[rule])) {
+            // enable with default construct
+            this.app.use(lusca[rule]());
+          }
         }
       }
-    }
-  }.bind(this));
+    }.bind(this));
+  }
 
   // default statement
   return true;
