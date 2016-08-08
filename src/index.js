@@ -693,7 +693,7 @@ Express.prototype.processSecurity = function () {
   // security is enable ?
   if (security.enable) {
     // parse all object keys
-    _.each(Object.keys(security), function (rule) {
+    _.each(Object.keys(_.omit(security, [ 'enable' ])), function (rule) {
       // use rules ?
       if (!_.isEmpty(rule) && rule !== 'csrf') {
 
