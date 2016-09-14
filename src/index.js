@@ -918,12 +918,24 @@ Express.prototype.processCors = function () {
 
   // get security data
   var enableCors      = this.config.get('config').cors;
+  // cors config
+  var corsConfig      = this.config.get('config').corsCfg;
   // all is ok ?
   if (_.isBoolean(enableCors) && enableCors) {
     // debug message
     this.logger.debug('[ Express.processCors ] - Try to enable CORS on app.');
-    // add cors
-    this.app.use(cors());
+
+    // has config ?
+    if (_.isObject(corsConfig) && !_.isEmpty(corsConfig)) {
+      // debug message
+      this.logger.debug([ '[ Express.processCors ] - CORS is enabled with a custom config :',
+        utils.obj.inspect(corsConfig) ].join(' '));
+      // add cors with config
+      this.app.use(cors(corsConfig));
+    } else {
+      // add cors
+      this.app.use(cors());
+    }
     // message
     this.logger.info('[ Express.processCors ] - CORS is enable for all routes.');
   } else {

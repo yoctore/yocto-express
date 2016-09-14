@@ -1,3 +1,7 @@
+## 2.1.0 (2016-09-14)
+
+- add cors configuration support.
+
 ## 2.0.2 (2016-08-08)
 
 - Can enable or disable security
