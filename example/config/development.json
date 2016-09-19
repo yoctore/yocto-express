@@ -23,7 +23,7 @@
       "enable"      : true,
       "options" : {
         "url"         : "myhosturl.url",
-        "aliases"     : [ "alias.myhosturl.url" ],      
+        "aliases"     : [ "alias.myhosturl.url" ],
         "subdomains"  : true,
         "http"        : {
           "redirect" : {
@@ -36,7 +36,7 @@
     }
   },
   "jwt" : {
-    "enable" : true,
+    "enable" : false,
     "key" : "REREER",
     "ips"           : [ "*" ]
   },
@@ -50,5 +50,22 @@
   "cors" : true,
   "corsCfg" : {
     "origin" : [ "127.0.0.1" ]
-  }
+  },
+  "redirect" : {
+    "www" : true,
+    "seo" : [ {
+      "code"    : 301,
+      "fromUrl" : "/test",
+      "toUrl"   : "/test2"
+    }, {
+      "code"    : 301,
+      "fromUrl" : "/test",
+      "toUrl"   : "/test23"
+    },
+    {
+      "code"    : 301,
+      "fromUrl" : "/test3",
+      "toUrl"   : "/test4"
+    } ]
+  } 
 }

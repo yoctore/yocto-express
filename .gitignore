@@ -5,3 +5,5 @@ node_modules
 example/bower_components
 example/node_modules
 example/certificate
+cert-jwt.lock
+cert-jwt.tmp

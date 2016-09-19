@@ -19,6 +19,15 @@ e.configure().then(function (success) {
 e.getApp().get('/', function(req, res){
   res.send('hello world');
 });
+
+e.getApp().get('/test2', function(req, res){
+  res.send('hello world 2');
+});
+
+e.getApp().get('/test4', function(req, res){
+  res.send('hello world 4');
+});
+
  e.getApp().listen(3000);
   //console.log(success);
   //console.log('session =>', e.getApp().get('session'));

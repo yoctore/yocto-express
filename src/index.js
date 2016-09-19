@@ -21,6 +21,7 @@ var MongoStore    = require('connect-mongo')(session);
 var prerender     = require('prerender-node');
 var cors          = require('cors');
 var https         = require('https');
+var joi           = require('joi');
 
 /**
  * manage Express setup
@@ -978,6 +979,44 @@ Express.prototype.processRedirect = function () {
         if (!_.startsWith(host, 'www.')) {
           // default redirect
           return res.redirect(301, [ req.protocol, '://www.', host, req.originalUrl ].join(''));
+        }
+        // do next process
+        next();
+      });
+    }
+    // is on request list
+    if (_.has(redirect, 'seo') && _.isArray(redirect.seo) && !_.isEmpty(redirect.seo)) {
+      // log message
+      this.logger.info('[ Express.processRedirect ] - enable redirect for custom url');
+      // set it
+      this.app.use(function (req, res, next) {
+        // get current host
+        var host = utils.request.getHost(req);
+
+        // validation schema
+        var schema = joi.object().required().keys({
+          code    : joi.number().required().valid([ 301, 302 ]),
+          fromUrl : joi.string().required().empty(),
+          toUrl   : joi.string().required().empty()
+        });
+
+        // get correct url
+        var obj = _.find(redirect.seo, function (item) {
+          // default statement
+          return item.fromUrl === req.originalUrl;
+        });
+
+        // item was founded ?
+        if (!_.isUndefined(obj)) {
+          // schema validation
+          var validate = joi.validate(obj, schema);
+
+          // has no error ?
+          if (_.isNull(validate.error)) {
+            // default redirect statement
+            return res.redirect(validate.value.code,
+              [ req.protocol, '://', host, validate.value.toUrl ].join(''));
+          }
         }
         // do next process
         next();

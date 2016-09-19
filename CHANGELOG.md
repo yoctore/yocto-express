@@ -1,3 +1,7 @@
+## 2.2.0 (2016-09-19)
+
+- Add redirect 301 support for list of defined urls.
+
 ## 2.1.0 (2016-09-14)
 
 - add cors configuration support.

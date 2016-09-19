@@ -1,6 +1,6 @@
 {
   "name": "yocto-express",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Manage express setup for an node js app.",
   "scripts": {},
   "author": {
@@ -27,7 +27,7 @@
   "main": "dist/index.js",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=4.3.1"
+    "node": ">=4.5.0"
   },
   "repository": {
     "type": "git",
