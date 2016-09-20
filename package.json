@@ -1,6 +1,6 @@
 {
   "name": "yocto-express",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Manage express setup for an node js app.",
   "scripts": {},
   "author": {
@@ -69,6 +69,7 @@
     "prerender-node": "^2.2.2",
     "q": "^1.4.1",
     "serve-favicon": "^2.2.1",
+    "url": "^0.11.0",
     "uuid": "^2.0.2",
     "yocto-config": "^1.8.1",
     "yocto-jwt": "^2.0.1",

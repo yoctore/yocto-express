@@ -1,3 +1,7 @@
+## 2.3.0 (2016-09-20)
+
+- Add query string support and full url redirect
+
 ## 2.2.0 (2016-09-19)
 
 - Add redirect 301 support for list of defined urls.

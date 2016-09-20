@@ -44,9 +44,6 @@
     "prerenderServiceUrl" : "http://seo.y8.re",
     "additionalAgents"    : [ "woobot"]
   },
-  "redirect" : {
-    "www" : false
-  },
   "cors" : true,
   "corsCfg" : {
     "origin" : [ "127.0.0.1" ]
@@ -54,13 +51,24 @@
   "redirect" : {
     "www" : true,
     "seo" : [ {
-      "code"    : 301,
-      "fromUrl" : "/test",
-      "toUrl"   : "/test2"
+      "code"        : 301,
+      "fromUrl"     : "/?q=5&toto=1&tutu=34",
+      "toUrl"       : "/",
+      "queryString" : true
+    }, {
+      "code"        : 301,
+      "fromUrl"     : "/test?q=5&toto=1&tutu=34",
+      "toUrl"       : "/test2",
+      "queryString" : true
     }, {
       "code"    : 301,
       "fromUrl" : "/test",
       "toUrl"   : "/test23"
+    },
+    {
+      "code"    : 301,
+      "fromUrl" : "/testabs",
+      "toUrl"   : "http://www.google.com"
     },
     {
       "code"    : 301,

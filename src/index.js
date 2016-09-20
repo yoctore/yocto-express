@@ -22,6 +22,7 @@ var prerender     = require('prerender-node');
 var cors          = require('cors');
 var https         = require('https');
 var joi           = require('joi');
+var url           = require('url');
 
 /**
  * manage Express setup
@@ -995,9 +996,10 @@ Express.prototype.processRedirect = function () {
 
         // validation schema
         var schema = joi.object().required().keys({
-          code    : joi.number().required().valid([ 301, 302 ]),
-          fromUrl : joi.string().required().empty(),
-          toUrl   : joi.string().required().empty()
+          code          : joi.number().required().valid([ 301, 302 ]),
+          fromUrl       : joi.string().required().empty(),
+          toUrl         : joi.string().required().empty(),
+          queryString   : joi.boolean().optional().default(false)
         });
 
         // get correct url
@@ -1013,9 +1015,34 @@ Express.prototype.processRedirect = function () {
 
           // has no error ?
           if (_.isNull(validate.error)) {
+
+            // has query string ?
+            var qse = url.parse(validate.value.fromUrl);
+
+            // default endUrl
+            var endUrl = [ req.protocol, '://', host, validate.value.toUrl ].join('');
+
+            // is absolute url ?
+            if (_.startsWith(validate.value.toUrl, 'http') ||
+              _.startsWith(validate.value.toUrl, 'https')) {
+              // change endUrl to use full defined url
+              endUrl = validate.value.toUrl;
+            }
+
+            // add original query string to desitnation url ?
+            if (validate.value.queryString && !_.isNull(qse.query)) {
+              // destination url as sub routes ?
+              var qsee = url.parse(endUrl);
+              // path is already defined and href url not ending by a slash ?
+              if (_.isNull(qsee.path) && !_.endsWith(qsee.href, '/')) {
+                // add slash at the end for query process
+                endUrl = [ endUrl , '/' ].join('');
+              }
+              // build with extract query string
+              endUrl = [ endUrl, qse.query ].join('?');
+            }
             // default redirect statement
-            return res.redirect(validate.value.code,
-              [ req.protocol, '://', host, validate.value.toUrl ].join(''));
+            return res.redirect(validate.value.code, endUrl);
           }
         }
         // do next process
