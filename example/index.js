@@ -17,14 +17,17 @@ e.configure().then(function (success) {
   res.send(200);
  });*/
 e.getApp().get('/', function(req, res){
+   logger.error('test');
   res.send('hello world');
 });
 
 e.getApp().get('/test2', function(req, res){
+   logger.warning('test 2');
   res.send('hello world 2');
 });
 
 e.getApp().get('/test4', function(req, res){
+  logger.error('test 4');
   res.send('hello world 4');
 });
 

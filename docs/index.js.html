@@ -1,4 +1,50 @@
-'use strict';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>index.js - yocto-express</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/custom.css"/>
+    <link type="text/css" rel="stylesheet" href="styles/tomorrow-night.min.css"/>
+    <script type="text/javascript" src="scripts/lodash.min.js"></script>
+    <script type="text/javascript" src="scripts/jquery.min.js"></script>
+    <script type="text/javascript" src="scripts/search.js"></script>
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+  <a href="http://www.yocto.re" target="_blank"><img class="logo" src="./extras/logo-yocto.png" alt="logo-yocto"/></a>
+    <h2><a href="index.html">Home</a><span class="version">v2.4.0</span></h2><input class="search" placeholder="Type your search here ...." /><h3>Classes</h3><ul><li><a href="Express.html">Express</a><ul class='methods'><li data-type='method'><a href="Express.html#configure">configure</a></li><li data-type='method'><a href="Express.html#configureWithoutLoad">configureWithoutLoad</a></li><li data-type='method'><a href="Express.html#getApp">getApp</a></li><li data-type='method'><a href="Express.html#getSettings">getSettings</a></li><li data-type='method'><a href="Express.html#isReady">isReady</a></li><li data-type='method'><a href="Express.html#processBase">processBase</a></li><li data-type='method'><a href="Express.html#processBodyParser">processBodyParser</a></li><li data-type='method'><a href="Express.html#processCompression">processCompression</a></li><li data-type='method'><a href="Express.html#processCookieParser">processCookieParser</a></li><li data-type='method'><a href="Express.html#processCors">processCors</a></li><li data-type='method'><a href="Express.html#processDirectory">processDirectory</a></li><li data-type='method'><a href="Express.html#processFavicon">processFavicon</a></li><li data-type='method'><a href="Express.html#processJsonCallack">processJsonCallack</a></li><li data-type='method'><a href="Express.html#processJwt">processJwt</a></li><li data-type='method'><a href="Express.html#processMethodOverride">processMethodOverride</a></li><li data-type='method'><a href="Express.html#processMultipart">processMultipart</a></li><li data-type='method'><a href="Express.html#processPrerender">processPrerender</a></li><li data-type='method'><a href="Express.html#processPrettyHTML">processPrettyHTML</a></li><li data-type='method'><a href="Express.html#processRedirect">processRedirect</a></li><li data-type='method'><a href="Express.html#processSecurity">processSecurity</a></li><li data-type='method'><a href="Express.html#processSession">processSession</a></li><li data-type='method'><a href="Express.html#processStackError">processStackError</a></li><li data-type='method'><a href="Express.html#processViewEngine">processViewEngine</a></li><li data-type='method'><a href="Express.html#removeMiddleware">removeMiddleware</a></li><li data-type='method'><a href="Express.html#set">set</a></li><li data-type='method'><a href="Express.html#useDirectory">useDirectory</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">index.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict';
 
 var df            = require('dateformat');
 var uuid          = require('uuid');
@@ -31,7 +77,7 @@ var config        = require('yocto-config');
 /**
  * Manage Express setup from given configuration
  *
- * @author ROBERT Mathieu <mathieu@yocto.re>
+ * @author ROBERT Mathieu &lt;mathieu@yocto.re>
  *
  * @class Express
  * @param {Instance} config yocto-config instance to use
@@ -120,9 +166,9 @@ Express.prototype.processBase = function () {
   }
 
   // check some property
-  if (_.has(this.config.get('config'), 'app') &&
-      _.has(this.config.get('config'), 'env') &&
-      _.has(this.config.get('config'), 'host') &&
+  if (_.has(this.config.get('config'), 'app') &amp;&amp;
+      _.has(this.config.get('config'), 'env') &amp;&amp;
+      _.has(this.config.get('config'), 'host') &amp;&amp;
       _.has(this.config.get('config'), 'protocol')) {
 
     // set the default name
@@ -165,7 +211,7 @@ Express.prototype.processBase = function () {
 
     // is https ?
     if (this.app.get('protocol') === 'https') {
-      // get path of cert & key file
+      // get path of cert &amp; key file
       var keyPath   = this.config.get('config').protocol.certificate.key;
       var certPath  = this.config.get('config').protocol.certificate.cert;
 
@@ -382,7 +428,7 @@ Express.prototype.processCompression = function () {
     var eFilter = eConfig.filter || {};
 
     // testing rules
-    if ((_.isString(eFilter.rules)) && (_.isString(eFilter.by)) && (_.isNumber(eFilter.level))) {
+    if ((_.isString(eFilter.rules)) &amp;&amp; (_.isString(eFilter.by)) &amp;&amp; (_.isNumber(eFilter.level))) {
 
       // processsing
       this.logger.info([ '[ Express.processCompression ] -',
@@ -394,7 +440,7 @@ Express.prototype.processCompression = function () {
       this.app.use(compression({
         filter  : function (request, response) {
           // has header with no compression rules ?
-          if (_.has(request, 'headers') && request.headers['x-no-compression']) {
+          if (_.has(request, 'headers') &amp;&amp; request.headers['x-no-compression']) {
             return false;
           }
 
@@ -595,11 +641,11 @@ Express.prototype.processSession = function () {
     var type      = opStore.type || 'uri';
 
     // is uri ? and is String ? ant not empty ?
-    if (instance === 'mongo' && type === 'uri' &&
-        _.isString(opStore.uri) && !_.isEmpty(opStore.uri)) {
+    if (instance === 'mongo' &amp;&amp; type === 'uri' &amp;&amp;
+        _.isString(opStore.uri) &amp;&amp; !_.isEmpty(opStore.uri)) {
 
       // check if property sslCA exist
-      if (_.has(opStore.options, 'server.sslCA') && _.isString(opStore.options.server.sslCA)) {
+      if (_.has(opStore.options, 'server.sslCA') &amp;&amp; _.isString(opStore.options.server.sslCA)) {
         // create buffer of this file
         opStore.options.server.sslCA = [
           fs.readFileSync(path.normalize(process.cwd() + '/' + opStore.options.server.sslCA))
@@ -607,7 +653,7 @@ Express.prototype.processSession = function () {
       }
 
       // check if property sslKey exist
-      if (_.has(opStore.options, 'server.sslKey') && _.isString(opStore.options.server.sslKey)) {
+      if (_.has(opStore.options, 'server.sslKey') &amp;&amp; _.isString(opStore.options.server.sslKey)) {
 
         // create buffer of this file
         opStore.options.server.sslKey =
@@ -615,7 +661,7 @@ Express.prototype.processSession = function () {
       }
 
       // check if property sslCert exist
-      if (_.has(opStore.options, 'server.sslCert') && _.isString(opStore.options.server.sslCert)) {
+      if (_.has(opStore.options, 'server.sslCert') &amp;&amp; _.isString(opStore.options.server.sslCert)) {
         // create buffer of this file
         opStore.options.server.sslCert =
           fs.readFileSync(path.normalize(process.cwd()  + '/' + opStore.options.server.sslCert));
@@ -711,7 +757,7 @@ Express.prototype.processSecurity = function () {
     // parse all object keys
     _.each(Object.keys(_.omit(security, [ 'enable' ])), function (rule) {
       // use rules ?
-      if (!_.isEmpty(rule) && rule !== 'csrf') {
+      if (!_.isEmpty(rule) &amp;&amp; rule !== 'csrf') {
 
         // log message
         this.logger.info([ '[ Express.processSecurity ] - Setting up [', rule.toUpperCase(),
@@ -864,8 +910,8 @@ Express.prototype.processJwt = function () {
   var jwt       = yoctoJwt(this.logger);
 
   // all is ok ?
-  if (_.isBoolean(jwtoken.enable) && jwtoken.enable &&
-      _.isString(jwtoken.key) && !_.isEmpty(jwtoken.key)) {
+  if (_.isBoolean(jwtoken.enable) &amp;&amp; jwtoken.enable &amp;&amp;
+      _.isString(jwtoken.key) &amp;&amp; !_.isEmpty(jwtoken.key)) {
     // debug message
     this.logger.debug('[ Express.processJwt ] - Try to process jwt key');
     // set current algorithm
@@ -940,12 +986,12 @@ Express.prototype.processCors = function () {
   // cors config
   var corsConfig      = this.config.get('config').corsCfg;
   // all is ok ?
-  if (_.isBoolean(enableCors) && enableCors) {
+  if (_.isBoolean(enableCors) &amp;&amp; enableCors) {
     // debug message
     this.logger.debug('[ Express.processCors ] - Try to enable CORS on app.');
 
     // has config ?
-    if (_.isObject(corsConfig) && !_.isEmpty(corsConfig)) {
+    if (_.isObject(corsConfig) &amp;&amp; !_.isEmpty(corsConfig)) {
       // debug message
       this.logger.debug([ '[ Express.processCors ] - CORS is enabled with a custom config :',
         utils.obj.inspect(corsConfig) ].join(' '));
@@ -1003,7 +1049,7 @@ Express.prototype.processRedirect = function () {
       });
     }
     // is on request list
-    if (_.has(redirect, 'seo') && _.isArray(redirect.seo) && !_.isEmpty(redirect.seo)) {
+    if (_.has(redirect, 'seo') &amp;&amp; _.isArray(redirect.seo) &amp;&amp; !_.isEmpty(redirect.seo)) {
       // log message
       this.logger.info('[ Express.processRedirect ] - enable redirect for custom url');
       // set it
@@ -1047,11 +1093,11 @@ Express.prototype.processRedirect = function () {
             }
 
             // add original query string to desitnation url ?
-            if (validate.value.queryString && !_.isNull(qse.query)) {
+            if (validate.value.queryString &amp;&amp; !_.isNull(qse.query)) {
               // destination url as sub routes ?
               var qsee = url.parse(endUrl);
               // path is already defined and href url not ending by a slash ?
-              if (_.isNull(qsee.path) && !_.endsWith(qsee.href, '/')) {
+              if (_.isNull(qsee.path) &amp;&amp; !_.endsWith(qsee.href, '/')) {
                 // add slash at the end for query process
                 endUrl = [ endUrl , '/' ].join('');
               }
@@ -1079,7 +1125,7 @@ Express.prototype.processRedirect = function () {
  */
 Express.prototype.isReady = function () {
   // default statement
-  return this.state && this.config.state;
+  return this.state &amp;&amp; this.config.state;
 };
 
 /**
@@ -1133,7 +1179,7 @@ Express.prototype.configureWithoutLoad = function (data, isConfigInstance) {
   // parse all methods
   async.each(methods, function (method, next) {
     // is valid item ?
-    if (!method.banner && !_.isEmpty(method.name)) {
+    if (!method.banner &amp;&amp; !_.isEmpty(method.name)) {
       // call succeed ?
       if (!(this[method.name].call(this))) {
         // push exception message in errors storage
@@ -1196,7 +1242,7 @@ Express.prototype.configure = function () {
   this.config.load().then(function (success) {
 
     // state is success
-    this.state = _.isObject(success) && !_.isEmpty(success);
+    this.state = _.isObject(success) &amp;&amp; !_.isEmpty(success);
 
     // process without load
     this.configureWithoutLoad(success).then(function (wdata) {
@@ -1226,9 +1272,9 @@ Express.prototype.configure = function () {
  */
 Express.prototype.useDirectory = function (name, p) {
   // checking name
-  if (_.isString(name) && !_.isEmpty(name)) {
+  if (_.isString(name) &amp;&amp; !_.isEmpty(name)) {
     // default path
-    p = _.isString(p) &&
+    p = _.isString(p) &amp;&amp;
        !_.isEmpty(p) ? p : (this.config[ [ name, 'DIRECTORY' ].join('_').toUpperCase() ] || name);
 
     // is relative path ?
@@ -1308,7 +1354,7 @@ Express.prototype.removeMiddleware = function (name) {
  */
 Express.prototype.set = function (name, value) {
   // check requirements
-  if (!_.isUndefined(name) && _.isString(name) && !_.isEmpty(name)) {
+  if (!_.isUndefined(name) &amp;&amp; _.isString(name) &amp;&amp; !_.isEmpty(name)) {
     // assign value
     this[name] = value;
   } else {
@@ -1342,3 +1388,20 @@ module.exports = function (c, l) {
   // default statement
   return new (Express)(c, l);
 };
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>Documentation for application <b>yocto-express<b> was generated at Thu Dec 08 2016 20:07:25 GMT+0400 (RET) with <a href='https://www.npmjs.com/package/yoctodoc'>yocto-doc</a> module - Copyright Yocto © 2016</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

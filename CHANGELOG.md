@@ -1,3 +1,7 @@
+## 2.4.0 (2016-09-20)
+
+- Update package, and refactoring core content with async process
+
 ## 2.3.0 (2016-09-20)
 
 - Add query string support and full url redirect
