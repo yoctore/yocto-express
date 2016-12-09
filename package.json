@@ -1,6 +1,6 @@
 {
   "name": "yocto-express",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Manage express setup for an node js app.",
   "scripts": {
     "test": "grunt test"
@@ -66,6 +66,7 @@
     "express": "^4.13.4",
     "express-session": "^1.14.2",
     "fs-extra": "^1.0.0",
+    "jade": "^1.11.0",
     "joi": "^10.0.5",
     "lodash": "^4.17.2",
     "lusca": "^1.4.0",
