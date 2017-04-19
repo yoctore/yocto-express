@@ -1,3 +1,7 @@
+## 2.4.2 (2017-04-19)
+
+- bug-fix : public file was not compressed, move the processCompression before public directory
+
 ## 2.4.0 (2016-09-20)
 
 - Update package, and refactoring core content with async process
