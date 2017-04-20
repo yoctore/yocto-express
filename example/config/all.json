@@ -3,11 +3,11 @@
   "port" : 3000,
   "directory" : [
     { "models"      : "./example/models" },
-    { "controllers" : "./example/controllers" },    
-    { "views"       : "./example/views" },    
-    { "public"      : "./example/public" },    
+    { "controllers" : "./example/controllers" },
+    { "views"       : "./example/views" },
+    { "public"      : "./example/public" },
     { "icons"       : "./example/public/icons" },
-    { "media"       : "./example/public/media" }             
+    { "media"       : "./example/public/media" }
   ],
   "encrypt_key" : {
     "key"   : "6e67ae372ad6d85cfad1abc366823e28",

@@ -1244,10 +1244,9 @@ Express.prototype.useDirectory = function (name, p) {
       this.logger.info([ '[ Express.useDirectory ] - Adding directory', p,
                          'on express app' ].join(' '));
 
-      // if views ?? process are different !!!
       if (name !== 'views') {
         // set static directory
-        this.app.use(express.static(p));
+        this.app.use(express.static(p, this.config.get('config').express.staticServe));
       } else {
         // set views
         this.app.set(name, p);

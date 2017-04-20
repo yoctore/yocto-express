@@ -7,7 +7,10 @@
     }
   },
   "express" : {
-    "jsonp"       : true,       
+    "staticServe" : {
+      "maxAge" : 9740
+    },
+    "jsonp"       : true,
     "prettyHtml"  : true,
     "filter"      : {
       "rules" : "json|text|javascript|css|html",
@@ -15,7 +18,7 @@
       "level" : 9
     },
     "multipart" : true,
-    "methodOverride" : [ 
+    "methodOverride" : [
         "_method",
         "X-HTTP-Method",
         "X-HTTP-Method-Override",
@@ -42,7 +45,7 @@
       "enable"      : false,
       "options" : {
         "url"         : "myhosturl.url",
-        "aliases"     : [ "alias.myhosturl.url" ],      
+        "aliases"     : [ "alias.myhosturl.url" ],
         "subdomains"  : true,
         "http"        : {
           "redirect" : {
