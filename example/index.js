@@ -12,7 +12,10 @@ e.config.enableExpress();
 e.useDirectory('publiceeeeAA');
 e.useDirectory('publiceeeeAA', '/toto');
 e.configure().then(function (success) {
- console.log(e.getApp());
+
+console.log(e.getApp());
+
+console.log(' --> Correctly configured');
  /*e.getApp().use(function(req, res) {
   res.send(200);
  });*/

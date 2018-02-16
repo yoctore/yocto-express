@@ -1,48 +1,59 @@
 'use strict';
 
 module.exports = function (grunt) {
-  // init config
+  // Init config
   grunt.initConfig({
-    // default package
-    pkg       : grunt.file.readJSON('package.json'),
-    // hint our app
+    // Default package
+    pkg : grunt.file.readJSON('package.json'),
+
+    // Hint our app
     yoctohint : {
-      options  : {},
-      all      : [ 'src/***', 'Gruntfile.js' ]
-    },
-    // Uglify our app
-    uglify    : {
+      json : [
+        'package.json'
+      ],
+      node : [
+        'src/*.js', 'Gruntfile.js'
+      ],
       options : {
-        banner  : '/* <%= pkg.name %> - <%= pkg.description %> - V<%= pkg.version %> */\n'
+        compatibility : true
+      }
+    },
+
+    // Uglify our app
+    uglify : {
+      options : {
+        banner : '/* <%= pkg.name %> - <%= pkg.description %> - V<%= pkg.version %> */\n'
       },
-      api     : {
+      api : {
         files : [ {
-          expand  : true,
-          cwd     : 'src',
-          src     : '**/*.js',
-          dest    : 'dist'
+          expand : true,
+          cwd    : 'src',
+          src    : '**/*.js',
+          dest   : 'dist'
         } ]
       }
     },
-    // unit tests
-    mochacli  : {
+
+    // Unit tests
+    mochacli : {
       options : {
-        'reporter'       : 'spec',
-        'inline-diffs'   : false,
-        'no-exit'        : true,
-        'force'          : false,
-        'check-leaks'    : true,
-        'bail'           : false
+        reporter       : 'spec',
+        'inline-diffs' : false,
+        'no-exit'      : true,
+        force          : false,
+        'check-leaks'  : true,
+        bail           : false
       },
-      all     : [ 'test/*.js' ]
+      all : [ 'test/*.js' ]
     },
-    yoctodoc  : {
+    yoctodoc : {
       options : {
-        // change your path destination
-        destination     : './docs'
+        // Change your path destination
+        destination : './docs'
       },
+
       // Set all your file here
-      all     : [ 'src/*.js' ]
+      all : [ 'src/*.js' ]
     }
   });
 
@@ -55,6 +66,6 @@ module.exports = function (grunt) {
   grunt.registerTask('hint', 'yoctohint');
   grunt.registerTask('test', 'mochacli');
   grunt.registerTask('doc', 'yoctodoc');
-  grunt.registerTask('build', [ 'hint', 'test', 'uglify', 'doc' ]);
+  grunt.registerTask('build', [ 'hint', 'test', 'uglify' ]);
   grunt.registerTask('default', 'build');
 };
