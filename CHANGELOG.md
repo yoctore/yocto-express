@@ -1,3 +1,8 @@
+## 3.0.0 (2018-02-16)
+
+- Major update of all dependencies
+- Update node version engine to >= 8.9.4
+
 ## 2.4.2 (2017-04-19)
 
 - bug-fix : public file was not compressed, move the processCompression before public directory
