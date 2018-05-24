@@ -928,6 +928,9 @@ Express.prototype.processJwt = function () {
       // Add alowed routes
       jwt.addAllowedRoutes(jwtoken.allowedRoutes || []);
 
+      // Add ignored routes to decrypt
+      jwt.addIgnoreDecryptRoutes(jwtoken.ignoreDecryptRoutes || []);
+
       // Set key
       if (jwt.setKey(jwtoken.key)) {
         // Add autorize middleware for automatic check
